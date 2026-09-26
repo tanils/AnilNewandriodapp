@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
         root.setPadding(24, 20, 24, 12);
 
         TextView title = new TextView(this);
-        title.setText("ANILNEWSFO");
+        title.setText("ANILNEWSFO • MARKET INTELLIGENCE");
         title.setTextSize(26);
         title.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         root.addView(title);
@@ -158,7 +158,12 @@ public class MainActivity extends Activity {
         }
 
         if ("news".equals(section)) {
-            heading("📰 NEWS / MARKET BLOG");
+            heading("📰 NEWS / MARKET INTELLIGENCE");
+            JSONObject regime = latest.optJSONObject("market_regime");
+            if (regime != null) {
+                card("MARKET STRUCTURE\n" + regime.optString("label", "DATA_UNAVAILABLE")
+                    + "\n\nThis is a description of supplied market structure, not a forecast.");
+            }
             JSONArray news = latest.optJSONArray("news");
             if (news == null || news.length() == 0) {
                 card("No current/recent news in this pipeline run.");
@@ -188,7 +193,8 @@ public class MainActivity extends Activity {
             for (int i = 0; i < fno.length(); i++) {
                 JSONObject x = fno.optJSONObject(i);
                 if (x == null) continue;
-                String chain = x.optBoolean("option_chain_available", false) ? "CHAIN READY" : "CHAIN UNAVAILABLE";
+                boolean ready = x.optBoolean("option_chain_available", false);
+                String chain = ready ? "CHAIN READY" : "CHAIN UNAVAILABLE";
                 card(
                     "#" + x.optInt("rank") + "  " + x.optString("symbol") + "\n\n" +
                     "Spot: ₹" + x.optString("price", "n/a") +
@@ -197,21 +203,67 @@ public class MainActivity extends Activity {
                     "Status: " + chain + "\n\n" +
                     x.optString("option_summary", "Detailed option-chain data unavailable.")
                 );
+                if (ready) {
+                    renderOptionLegs(x);
+                }
             }
             JSONArray analyses = latest.optJSONArray("ai_analyses");
             if (analyses != null && analyses.length() > 0) {
                 heading("🤖 AI ANALYSIS");
                 for (int i = 0; i < analyses.length(); i++) {
-                    JSONObject a = analyses.optJSONObject(i);
-                    if (a != null) card(a.optString("provider", "AI") + "\n\n" + a.optString("analysis", ""));
+                    JSONObject item = analyses.optJSONObject(i);
+                    if (item != null) card(item.optString("provider", "AI") + "\n\n" + item.optString("analysis", ""));
                 }
+            } else {
+                card("AI analysis is currently unavailable. The app will not invent a CE/PE trade without sufficient evidence.");
             }
         } else {
             heading("🔥 TECHNICAL BREAKOUT WATCH");
             JSONArray breakouts = latest.optJSONArray("breakouts");
             if (breakouts == null || breakouts.length() == 0) {
-                card("Breakout scanner is prepared in the app UI. Technical pattern detection will populate this section in the next engine phase.\n\nThe app will show: pattern, resistance/support, distance to trigger, volume confirmation, EMA structure and WAIT/READY status.");
+                card("No technical breakout watch candidates in this run.\n\nThe scanner checks previous-day high/low, volume confirmation and EMA structure.");
+                return;
             }
+            for (int i = 0; i < breakouts.length(); i++) {
+                JSONObject b = breakouts.optJSONObject(i);
+                if (b == null) continue;
+                card(
+                    b.optString("symbol", "") + "  |  " + b.optString("status", "WATCH") + "\n\n" +
+                    b.optString("pattern", "") + "\n" +
+                    "Price: ₹" + b.optString("price", "n/a") +
+                    " | Change: " + b.optString("change_pct", "n/a") + "%\n" +
+                    "Trigger: ₹" + b.optString("trigger", "n/a") +
+                    " | Invalidation: ₹" + b.optString("invalidation", "n/a") + "\n" +
+                    "Distance: " + b.optString("distance_pct", "n/a") + "%" +
+                    " | Volume: " + b.optString("volume_ratio", "n/a") + "x\n\n" +
+                    b.optString("reason", "")
+                );
+            }
+        }
+    }
+
+    private void renderOptionLegs(JSONObject x) {
+        JSONArray calls = x.optJSONArray("calls");
+        JSONArray puts = x.optJSONArray("puts");
+        if ((calls == null || calls.length() == 0) && (puts == null || puts.length() == 0)) return;
+        StringBuilder s = new StringBuilder("NEAR-SPOT OPTION DATA\n");
+        appendLegs(s, "CALLS", calls);
+        appendLegs(s, "PUTS", puts);
+        card(s.toString());
+    }
+
+    private void appendLegs(StringBuilder s, String title, JSONArray legs) {
+        if (legs == null) return;
+        s.append("\n").append(title).append("\n");
+        int limit = Math.min(3, legs.length());
+        for (int i = 0; i < limit; i++) {
+            JSONObject leg = legs.optJSONObject(i);
+            if (leg == null) continue;
+            s.append("Strike ").append(leg.optString("strike", "n/a"))
+             .append(" | LTP ").append(leg.optString("lastPrice", "n/a"))
+             .append(" | OI ").append(leg.optString("openInterest", "n/a"))
+             .append(" | IV ").append(leg.optString("impliedVolatility", "n/a"))
+             .append("\n");
         }
     }
 
