@@ -53,6 +53,7 @@ public class MainActivity extends Activity {
         ScrollView scroll = new ScrollView(this);
         LinearLayout body = new LinearLayout(this);
         body.setOrientation(LinearLayout.VERTICAL);
+        content = body;
 
         LinearLayout liveRow = new LinearLayout(this);
         liveRow.setOrientation(LinearLayout.HORIZONTAL);
