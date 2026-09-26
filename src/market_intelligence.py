@@ -26,7 +26,8 @@ def send_telegram(message: str) -> None:
     token = os.getenv("TELEGRAM_BOT_TOKEN")
     chat_id = os.getenv("TELEGRAM_CHAT_ID")
     if not token or not chat_id:
-        raise RuntimeError("TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are required")
+        print("Telegram credentials not configured; continuing without Telegram delivery.")
+        return
     for i in range(0, len(message), 3900):
         r = requests.post(
             f"https://api.telegram.org/bot{token}/sendMessage",
