@@ -14,10 +14,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class MainActivity extends Activity {
+    // The Android repository is the live feed owner. Keep ANILNEWSFO as a fallback only.
     private static final String FEED_URL =
-        "https://raw.githubusercontent.com/tanils/ANILNEWSFO/main/data/app_feed.json";
-    private static final String FEED_MIRROR_URL =
         "https://raw.githubusercontent.com/tanils/AnilNewandriodapp/main/data/app_feed.json";
+    private static final String FEED_MIRROR_URL =
+        "https://raw.githubusercontent.com/tanils/ANILNEWSFO/main/data/app_feed.json";
 
     private LinearLayout content;
     private TextView status;
@@ -87,22 +88,22 @@ public class MainActivity extends Activity {
         status.setText("Refreshing latest pipeline output…");
         new Thread(() -> {
             try {
-                String json = fetchUrl(FEED_URL);
+                // Add a cache-buster so a successful GitHub raw response cannot keep the old feed.
+                String json = fetchUrl(FEED_URL + "?v=" + System.currentTimeMillis());
                 if (json == null || json.trim().isEmpty()) {
-                    json = fetchUrl(FEED_MIRROR_URL);
+                    json = fetchUrl(FEED_MIRROR_URL + "?v=" + System.currentTimeMillis());
                 }
                 if (json == null || json.trim().isEmpty()) {
                     throw new Exception("No feed available from primary or mirror source.");
                 }
-                StringBuilder out = new StringBuilder(json);
-                latest = new JSONObject(out.toString());
+                latest = new JSONObject(json);
                 runOnUiThread(() -> {
                     status.setText("Updated: " + latest.optString("generated_at_utc", "unknown"));
                     loadSection("news");
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {
-                    status.setText("Feed unavailable. Pull to retry.");
+                    status.setText("Feed unavailable. Tap ↻ to retry.");
                     showMessage("Unable to load latest pipeline data.\n" + e.getMessage());
                 });
             }
