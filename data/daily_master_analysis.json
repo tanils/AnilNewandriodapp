@@ -1,0 +1,46 @@
+{
+  "trading_date": "2026-09-27",
+  "refreshes": [
+    {
+      "timestamp_ist": "2026-09-27T00:14:59.768760+05:30",
+      "phase": "night",
+      "generated_at_utc": "2026-09-26T18:44:43.682523+00:00",
+      "news_count": 40,
+      "fno_candidate_count": 3,
+      "ai_status": "NO_AI_AVAILABLE",
+      "market_regime": "BEARISH_STRUCTURE",
+      "candidates": [
+        {
+          "rank": 1,
+          "symbol": "POLICYBZR",
+          "price": 1166.0,
+          "change_pct": -3.41,
+          "setup_quality_score": 60.12,
+          "option_chain_available": false
+        },
+        {
+          "rank": 2,
+          "symbol": "ADANIPORTS",
+          "price": 1788.0,
+          "change_pct": 0.15,
+          "setup_quality_score": 52.73,
+          "option_chain_available": false
+        },
+        {
+          "rank": 3,
+          "symbol": "INFY",
+          "price": 1000.2000122070312,
+          "change_pct": -1.41,
+          "setup_quality_score": 49.72,
+          "option_chain_available": false
+        }
+      ]
+    }
+  ],
+  "last_refresh_ist": "2026-09-27T00:14:59.768760+05:30",
+  "refresh_count": 1,
+  "capital_inr": 25000,
+  "focus": "Liquid F&O stocks + NIFTY + BANKNIFTY",
+  "strategy_rule": "No forced trade; require catalyst + price action + OI/option evidence + clear invalidation",
+  "next_refresh": "Next scheduled hourly market-intelligence run"
+}

@@ -1,7 +1,7 @@
 {
   "app_version": 1,
-  "phase": "pre_market",
-  "generated_at_utc": "2026-09-26T16:05:40.767514+00:00",
+  "phase": "night",
+  "generated_at_utc": "2026-09-26T18:44:43.682523+00:00",
   "news": [
     {
       "headline": "Sebi bans Omaxe, 5 others for violating minimum public shareholding norms",
@@ -167,7 +167,7 @@
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-26T16:05:51.008781+00:00",
+      "chain_fetched_at_utc": "2026-09-26T18:44:54.547670+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     },
@@ -183,7 +183,7 @@
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-26T16:05:51.395332+00:00",
+      "chain_fetched_at_utc": "2026-09-26T18:44:54.847515+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     },
@@ -199,13 +199,250 @@
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-26T16:05:51.821246+00:00",
+      "chain_fetched_at_utc": "2026-09-26T18:44:55.270306+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     }
   ],
-  "breakouts": [],
+  "market_regime": {
+    "label": "BEARISH_STRUCTURE",
+    "indices": {
+      "NIFTY": {
+        "price": 23140.5,
+        "change_pct": 0.34,
+        "structure": "BEARISH_STRUCTURE",
+        "ema20": 23517.64,
+        "ema50": 23803.84
+      },
+      "BANKNIFTY": {
+        "price": 55580.3984375,
+        "change_pct": 0.26,
+        "structure": "BEARISH_STRUCTURE",
+        "ema20": 56498.95,
+        "ema50": 56854.52
+      }
+    }
+  },
+  "breakouts": [
+    {
+      "symbol": "POLICYBZR",
+      "price": 1166.0,
+      "change_pct": -3.41,
+      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
+      "trigger": 1207.2,
+      "invalidation": 1207.2,
+      "distance_pct": 3.41,
+      "volume_ratio": 16.04,
+      "rsi14": 23.08,
+      "ema20": 1685.6,
+      "ema50": 1703.03,
+      "status": "READY",
+      "reason": "price is below previous-day low; volume 16.04x 20D average; bearish EMA20 < EMA50 structure; RSI14 23.1",
+      "source": "yfinance",
+      "fetched_at_utc": "2026-09-26T18:44:44.916089+00:00"
+    },
+    {
+      "symbol": "TRENT",
+      "price": 2669.300048828125,
+      "change_pct": -1.14,
+      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
+      "trigger": 2699.9,
+      "invalidation": 2699.9,
+      "distance_pct": 1.13,
+      "volume_ratio": 1.66,
+      "rsi14": 31.19,
+      "ema20": 2799.15,
+      "ema50": 2864.42,
+      "status": "READY",
+      "reason": "price is below previous-day low; volume 1.66x 20D average; bearish EMA20 < EMA50 structure; RSI14 31.2",
+      "source": "yfinance",
+      "fetched_at_utc": "2026-09-26T18:44:52.887991+00:00"
+    },
+    {
+      "symbol": "ICICIBANK",
+      "price": 1326.800048828125,
+      "change_pct": -0.58,
+      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
+      "trigger": 1330.1,
+      "invalidation": 1330.1,
+      "distance_pct": 0.25,
+      "volume_ratio": 1.25,
+      "rsi14": 11.42,
+      "ema20": 1369.04,
+      "ema50": 1387.0,
+      "status": "READY",
+      "reason": "price is below previous-day low; volume 1.25x 20D average; bearish EMA20 < EMA50 structure; RSI14 11.4",
+      "source": "yfinance",
+      "fetched_at_utc": "2026-09-26T18:44:46.645164+00:00"
+    },
+    {
+      "symbol": "INFY",
+      "price": 1000.2000122070312,
+      "change_pct": -1.41,
+      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
+      "trigger": 1005.2,
+      "invalidation": 1005.2,
+      "distance_pct": 0.5,
+      "volume_ratio": 1.2,
+      "rsi14": 24.52,
+      "ema20": 1058.86,
+      "ema50": 1091.37,
+      "status": "READY",
+      "reason": "price is below previous-day low; volume 1.20x 20D average; bearish EMA20 < EMA50 structure; RSI14 24.5",
+      "source": "yfinance",
+      "fetched_at_utc": "2026-09-26T18:44:45.749546+00:00"
+    },
+    {
+      "symbol": "BAJAJFINSV",
+      "price": 1771.0,
+      "change_pct": 0.49,
+      "pattern": "NEAR PREVIOUS-DAY-LOW",
+      "trigger": 1760.9,
+      "invalidation": 1818.0,
+      "distance_pct": 0.57,
+      "volume_ratio": 2.35,
+      "rsi14": 22.31,
+      "ema20": 1879.55,
+      "ema50": 1909.88,
+      "status": "WATCH",
+      "reason": "price is close to previous-day low; volume 2.35x 20D average; bearish EMA20 < EMA50 structure; RSI14 22.3",
+      "source": "yfinance",
+      "fetched_at_utc": "2026-09-26T18:44:47.877462+00:00"
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "price": 404.0,
+      "change_pct": -0.25,
+      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
+      "trigger": 404.3,
+      "invalidation": 404.3,
+      "distance_pct": 0.07,
+      "volume_ratio": 1.73,
+      "rsi14": 30.87,
+      "ema20": 411.91,
+      "ema50": 406.0,
+      "status": "CONFIRM",
+      "reason": "price is below previous-day low; volume 1.73x 20D average; RSI14 30.9",
+      "source": "yfinance",
+      "fetched_at_utc": "2026-09-26T18:44:47.167010+00:00"
+    },
+    {
+      "symbol": "AXISBANK",
+      "price": 1222.4000244140625,
+      "change_pct": 3.03,
+      "pattern": "NEAR PREVIOUS-DAY-HIGH",
+      "trigger": 1225.2,
+      "invalidation": 1175.0,
+      "distance_pct": 0.23,
+      "volume_ratio": 1.53,
+      "rsi14": 39.19,
+      "ema20": 1240.09,
+      "ema50": 1253.48,
+      "status": "WATCH",
+      "reason": "price is close to previous-day high; volume 1.53x 20D average; bearish EMA20 < EMA50 structure; RSI14 39.2",
+      "source": "yfinance",
+      "fetched_at_utc": "2026-09-26T18:44:45.528011+00:00"
+    },
+    {
+      "symbol": "TCS",
+      "price": 2082.0,
+      "change_pct": -0.24,
+      "pattern": "NEAR PREVIOUS-DAY-HIGH",
+      "trigger": 2096.9,
+      "invalidation": 2067.1,
+      "distance_pct": 0.71,
+      "volume_ratio": 1.16,
+      "rsi14": 22.21,
+      "ema20": 2186.34,
+      "ema50": 2240.98,
+      "status": "WATCH",
+      "reason": "price is close to previous-day high; volume 1.16x 20D average; confirmation needed; bearish EMA20 < EMA50 structure; RSI14 22.2",
+      "source": "yfinance",
+      "fetched_at_utc": "2026-09-26T18:44:51.452974+00:00"
+    },
+    {
+      "symbol": "RELIANCE",
+      "price": 1226.0,
+      "change_pct": 0.56,
+      "pattern": "NEAR PREVIOUS-DAY-LOW",
+      "trigger": 1219.2,
+      "invalidation": 1241.6,
+      "distance_pct": 0.56,
+      "volume_ratio": 1.14,
+      "rsi14": 25.66,
+      "ema20": 1258.46,
+      "ema50": 1282.42,
+      "status": "WATCH",
+      "reason": "price is close to previous-day low; volume 1.14x 20D average; confirmation needed; bearish EMA20 < EMA50 structure; RSI14 25.7",
+      "source": "yfinance",
+      "fetched_at_utc": "2026-09-26T18:44:46.181404+00:00"
+    },
+    {
+      "symbol": "M&M",
+      "price": 3035.0,
+      "change_pct": 1.75,
+      "pattern": "NEAR PREVIOUS-DAY-HIGH",
+      "trigger": 3039.0,
+      "invalidation": 2982.7,
+      "distance_pct": 0.13,
+      "volume_ratio": 1.09,
+      "rsi14": 31.07,
+      "ema20": 3115.84,
+      "ema50": 3188.4,
+      "status": "WATCH",
+      "reason": "price is close to previous-day high; volume 1.09x 20D average; confirmation needed; bearish EMA20 < EMA50 structure; RSI14 31.1",
+      "source": "yfinance",
+      "fetched_at_utc": "2026-09-26T18:44:49.796136+00:00"
+    }
+  ],
   "ai_analyses": [],
   "ai_status": "NO_AI_AVAILABLE",
-  "available_models": []
+  "available_models": [],
+  "daily_master_analysis": {
+    "trading_date": "2026-09-27",
+    "refreshes": [
+      {
+        "timestamp_ist": "2026-09-27T00:14:59.768760+05:30",
+        "phase": "night",
+        "generated_at_utc": "2026-09-26T18:44:43.682523+00:00",
+        "news_count": 40,
+        "fno_candidate_count": 3,
+        "ai_status": "NO_AI_AVAILABLE",
+        "market_regime": "BEARISH_STRUCTURE",
+        "candidates": [
+          {
+            "rank": 1,
+            "symbol": "POLICYBZR",
+            "price": 1166.0,
+            "change_pct": -3.41,
+            "setup_quality_score": 60.12,
+            "option_chain_available": false
+          },
+          {
+            "rank": 2,
+            "symbol": "ADANIPORTS",
+            "price": 1788.0,
+            "change_pct": 0.15,
+            "setup_quality_score": 52.73,
+            "option_chain_available": false
+          },
+          {
+            "rank": 3,
+            "symbol": "INFY",
+            "price": 1000.2000122070312,
+            "change_pct": -1.41,
+            "setup_quality_score": 49.72,
+            "option_chain_available": false
+          }
+        ]
+      }
+    ],
+    "last_refresh_ist": "2026-09-27T00:14:59.768760+05:30",
+    "refresh_count": 1,
+    "capital_inr": 25000,
+    "focus": "Liquid F&O stocks + NIFTY + BANKNIFTY",
+    "strategy_rule": "No forced trade; require catalyst + price action + OI/option evidence + clear invalidation",
+    "next_refresh": "Next scheduled hourly market-intelligence run"
+  },
+  "master_status": "AI_UNAVAILABLE"
 }
