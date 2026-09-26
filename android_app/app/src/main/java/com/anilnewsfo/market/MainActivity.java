@@ -31,47 +31,79 @@ public class MainActivity extends Activity {
     private void buildUi() {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(24, 20, 24, 12);
+        root.setPadding(20, 18, 20, 10);
 
         TextView title = new TextView(this);
-        title.setText("ANILNEWSFO • MARKET INTELLIGENCE");
-        title.setTextSize(26);
+        title.setText("ANILNEWSFO");
+        title.setTextSize(28);
         title.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         root.addView(title);
 
+        TextView subtitle = new TextView(this);
+        subtitle.setText("Market Intelligence • News • F&O • AI");
+        subtitle.setTextSize(13);
+        root.addView(subtitle);
+
         status = new TextView(this);
         status.setText("Loading latest market intelligence…");
-        status.setTextSize(13);
+        status.setTextSize(12);
+        status.setPadding(0, 6, 0, 10);
         root.addView(status);
 
-        LinearLayout tabs = new LinearLayout(this);
-        tabs.setOrientation(LinearLayout.HORIZONTAL);
-
-        Button news = tabButton("📰 NEWS");
-        Button fno = tabButton("📊 F&O");
-        Button breakout = tabButton("🔥 BREAKOUTS");
-        Button refresh = tabButton("↻");
-
-        tabs.addView(news, new LinearLayout.LayoutParams(0, 56, 1));
-        tabs.addView(fno, new LinearLayout.LayoutParams(0, 56, 1));
-        tabs.addView(breakout, new LinearLayout.LayoutParams(0, 56, 1));
-        tabs.addView(refresh, new LinearLayout.LayoutParams(56, 56));
-
-        root.addView(tabs);
-
         ScrollView scroll = new ScrollView(this);
-        content = new LinearLayout(this);
-        content.setOrientation(LinearLayout.VERTICAL);
-        scroll.addView(content);
-        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
+        LinearLayout body = new LinearLayout(this);
+        body.setOrientation(LinearLayout.VERTICAL);
 
-        news.setOnClickListener(v -> loadSection("news"));
-        fno.setOnClickListener(v -> loadSection("fno"));
-        breakout.setOnClickListener(v -> loadSection("breakouts"));
+        LinearLayout liveRow = new LinearLayout(this);
+        liveRow.setOrientation(LinearLayout.HORIZONTAL);
+        liveRow.addView(dashboardCard("📡", "LIVE MARKET", "Market structure & session status", "live"),
+                new LinearLayout.LayoutParams(0, 112, 1));
+        liveRow.addView(dashboardCard("📰", "NEWS", "Important market-moving news", "news"),
+                new LinearLayout.LayoutParams(0, 112, 1));
+        body.addView(liveRow);
+
+        LinearLayout fnoRow = new LinearLayout(this);
+        fnoRow.setOrientation(LinearLayout.HORIZONTAL);
+        fnoRow.addView(dashboardCard("📊", "F&O", "OI • PCR • options • setups", "fno"),
+                new LinearLayout.LayoutParams(0, 112, 1));
+        fnoRow.addView(dashboardCard("🔥", "BREAKOUTS", "Technical trigger watch", "breakouts"),
+                new LinearLayout.LayoutParams(0, 112, 1));
+        body.addView(fnoRow);
+
+        LinearLayout aiRow = new LinearLayout(this);
+        aiRow.setOrientation(LinearLayout.HORIZONTAL);
+        aiRow.addView(dashboardCard("🤖", "AI ANALYSIS", "Cross-check & trade evidence", "ai"),
+                new LinearLayout.LayoutParams(0, 112, 1));
+        aiRow.addView(dashboardCard("⚡", "NEWS IMPACT", "Reaction vs headline", "impact"),
+                new LinearLayout.LayoutParams(0, 112, 1));
+        body.addView(aiRow);
+
+        Button refresh = new Button(this);
+        refresh.setText("↻  REFRESH LIVE FEED");
+        refresh.setTextSize(13);
         refresh.setOnClickListener(v -> loadFeed());
+        LinearLayout.LayoutParams refreshParams = new LinearLayout.LayoutParams(-1, 56);
+        refreshParams.setMargins(0, 10, 0, 8);
+        body.addView(refresh, refreshParams);
 
+        scroll.addView(body);
+        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
         setContentView(root);
     }
+
+    private Button dashboardCard(String icon, String title, String subtitle, String section) {
+        Button b = new Button(this);
+        b.setAllCaps(false);
+        b.setText(icon + "  " + title + "\n" + subtitle);
+        b.setTextSize(12);
+        b.setGravity(Gravity.CENTER);
+        b.setOnClickListener(v -> loadSection(section));
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(0, 112, 1);
+        p.setMargins(5, 5, 5, 5);
+        b.setLayoutParams(p);
+        return b;
+    }
+
 
     private Button tabButton(String text) {
         Button b = new Button(this);
@@ -159,11 +191,6 @@ public class MainActivity extends Activity {
 
         if ("news".equals(section)) {
             heading("📰 NEWS / MARKET INTELLIGENCE");
-            JSONObject regime = latest.optJSONObject("market_regime");
-            if (regime != null) {
-                card("MARKET STRUCTURE\n" + regime.optString("label", "DATA_UNAVAILABLE")
-                    + "\n\nThis is a description of supplied market structure, not a forecast.");
-            }
             JSONArray news = latest.optJSONArray("news");
             if (news == null || news.length() == 0) {
                 card("No current/recent news in this pipeline run.");
@@ -172,16 +199,26 @@ public class MainActivity extends Activity {
             for (int i = 0; i < news.length(); i++) {
                 JSONObject n = news.optJSONObject(i);
                 if (n == null) continue;
-                String symbols = n.optString("symbols", "MARKET");
-                card(
-                    symbols + "\n\n" +
-                    n.optString("headline", "") + "\n\n" +
-                    "Type: " + n.optString("news_type", "context") +
-                    " | Freshness: " + n.optString("freshness", "unknown") + "\n" +
-                    "Source: " + n.optString("source", "unknown") + "\n" +
-                    "Published: " + n.optString("published", "unknown") + "\n\n" +
-                    n.optString("summary", "")
-                );
+                card(newsCardText(n));
+            }
+        } else if ("impact".equals(section)) {
+            heading("⚡ NEWS IMPACT");
+            card("How the headline is behaving in the market. This is evidence, not a prediction.");
+            JSONArray news = latest.optJSONArray("news");
+            if (news == null || news.length() == 0) {
+                card("No news-impact data available.");
+                return;
+            }
+            for (int i = 0; i < Math.min(10, news.length()); i++) {
+                JSONObject n = news.optJSONObject(i);
+                if (n == null) continue;
+                String symbols = n.optString("symbols", "MARKET/SECTOR");
+                String impact = n.optString("news_type", "context").toUpperCase();
+                String freshness = n.optString("freshness", "unknown");
+                card(symbols + "\n\nIMPACT CLASS: " + impact +
+                    "\nFRESHNESS: " + freshness +
+                    "\n\n" + n.optString("headline", "") +
+                    "\n\nMarket reaction is shown only where market data is available; no reaction is invented.");
             }
         } else if ("fno".equals(section)) {
             heading("📊 F&O / OPTIONS");
@@ -194,34 +231,21 @@ public class MainActivity extends Activity {
                 JSONObject x = fno.optJSONObject(i);
                 if (x == null) continue;
                 boolean ready = x.optBoolean("option_chain_available", false);
-                String chain = ready ? "CHAIN READY" : "CHAIN UNAVAILABLE";
                 card(
                     "#" + x.optInt("rank") + "  " + x.optString("symbol") + "\n\n" +
                     "Spot: ₹" + x.optString("price", "n/a") +
                     " | Change: " + x.optString("change_pct", "n/a") + "%\n" +
                     "Setup score: " + x.optString("setup_quality_score", "n/a") + "/100\n" +
-                    "Status: " + chain + "\n\n" +
+                    "Status: " + (ready ? "CHAIN READY" : "CHAIN UNAVAILABLE") + "\n\n" +
                     x.optString("option_summary", "Detailed option-chain data unavailable.")
                 );
-                if (ready) {
-                    renderOptionLegs(x);
-                }
+                if (ready) renderOptionLegs(x);
             }
-            JSONArray analyses = latest.optJSONArray("ai_analyses");
-            if (analyses != null && analyses.length() > 0) {
-                heading("🤖 AI ANALYSIS");
-                for (int i = 0; i < analyses.length(); i++) {
-                    JSONObject item = analyses.optJSONObject(i);
-                    if (item != null) card(item.optString("provider", "AI") + "\n\n" + item.optString("analysis", ""));
-                }
-            } else {
-                card("AI analysis is currently unavailable. The app will not invent a CE/PE trade without sufficient evidence.");
-            }
-        } else {
+        } else if ("breakouts".equals(section)) {
             heading("🔥 TECHNICAL BREAKOUT WATCH");
             JSONArray breakouts = latest.optJSONArray("breakouts");
             if (breakouts == null || breakouts.length() == 0) {
-                card("No technical breakout watch candidates in this run.\n\nThe scanner checks previous-day high/low, volume confirmation and EMA structure.");
+                card("No technical breakout watch candidates in this run.");
                 return;
             }
             for (int i = 0; i < breakouts.length(); i++) {
@@ -239,7 +263,44 @@ public class MainActivity extends Activity {
                     b.optString("reason", "")
                 );
             }
+        } else if ("ai".equals(section)) {
+            heading("🤖 AI ANALYSIS");
+            JSONArray analyses = latest.optJSONArray("ai_analyses");
+            String aiStatus = latest.optString("ai_status", "unknown");
+            card("AI STATUS: " + aiStatus.toUpperCase() +
+                "\n\nAI output is cross-checked against supplied news, technicals and option-chain evidence. Missing evidence stays unavailable.");
+            if (analyses == null || analyses.length() == 0) {
+                card("No AI provider returned an analysis for this pipeline run.");
+                return;
+            }
+            for (int i = 0; i < analyses.length(); i++) {
+                JSONObject item = analyses.optJSONObject(i);
+                if (item != null) card(item.optString("provider", "AI") + "\n\n" + item.optString("analysis", ""));
+            }
+        } else {
+            heading("📡 LIVE MARKET INTELLIGENCE");
+            JSONObject regime = latest.optJSONObject("market_regime");
+            if (regime != null) {
+                card("MARKET STRUCTURE\n" + regime.optString("label", "DATA_UNAVAILABLE"));
+                JSONObject indices = regime.optJSONObject("indices");
+                if (indices != null) {
+                    card("NIFTY / BANK NIFTY\n" + indices.toString().replace("{", "").replace("}", "").replace(",", "\n"));
+                }
+            }
+            card("Last pipeline update\n" + latest.optString("generated_at_utc", "unknown") +
+                "\n\nPhase: " + latest.optString("phase", "unknown") +
+                "\n\nUse NEWS for catalysts, F&O for option evidence, BREAKOUTS for technical triggers and AI ANALYSIS for cross-checking.");
         }
+    }
+
+    private String newsCardText(JSONObject n) {
+        return n.optString("symbols", "MARKET/SECTOR") + "\n\n" +
+            n.optString("headline", "") + "\n\n" +
+            "Type: " + n.optString("news_type", "context") +
+            " | Freshness: " + n.optString("freshness", "unknown") + "\n" +
+            "Source: " + n.optString("source", "unknown") + "\n" +
+            "Published: " + n.optString("published", "unknown") + "\n\n" +
+            n.optString("summary", "");
     }
 
     private void renderOptionLegs(JSONObject x) {
