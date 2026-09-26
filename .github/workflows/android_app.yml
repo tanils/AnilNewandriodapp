@@ -6,7 +6,7 @@ on:
       - "android_app/**"
   push:
     branches:
-      - android-app-v1
+      - main
     paths:
       - "android_app/**"
 
