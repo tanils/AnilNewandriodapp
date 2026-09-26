@@ -194,10 +194,30 @@ public class MainActivity extends Activity {
     private void loadSection(String section) {
         dashboardVisible = false;
         clear();
+
+        LinearLayout sectionHeader = new LinearLayout(this);
+        sectionHeader.setOrientation(LinearLayout.HORIZONTAL);
+        sectionHeader.setGravity(Gravity.CENTER_VERTICAL);
+        sectionHeader.setPadding(0, 4, 0, 8);
+
         Button back = new Button(this);
-        back.setText("←  BACK TO HOME");
+        back.setText("← HOME");
+        back.setTextSize(14);
+        back.setAllCaps(false);
         back.setOnClickListener(v -> renderDashboard());
-        content.addView(back, new LinearLayout.LayoutParams(-1, 52));
+        sectionHeader.addView(back, new LinearLayout.LayoutParams(120, 56));
+
+        TextView selected = new TextView(this);
+        selected.setText(sectionTitle(section));
+        selected.setTextSize(18);
+        selected.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        selected.setGravity(Gravity.CENTER_VERTICAL);
+        LinearLayout.LayoutParams selectedParams = new LinearLayout.LayoutParams(0, 56, 1);
+        selectedParams.setMargins(8, 0, 4, 0);
+        sectionHeader.addView(selected, selectedParams);
+
+        content.addView(sectionHeader);
+
         if (latest == null) {
             showMessage("No feed loaded yet.");
             return;
@@ -305,6 +325,15 @@ public class MainActivity extends Activity {
                 "\n\nPhase: " + latest.optString("phase", "unknown") +
                 "\n\nUse NEWS for catalysts, F&O for option evidence, BREAKOUTS for technical triggers and AI ANALYSIS for cross-checking.");
         }
+    }
+
+    private String sectionTitle(String section) {
+        if ("news".equals(section)) return "📰 NEWS";
+        if ("fno".equals(section)) return "📊 F&O";
+        if ("breakouts".equals(section)) return "🔥 BREAKOUTS";
+        if ("ai".equals(section)) return "🤖 AI ANALYSIS";
+        if ("impact".equals(section)) return "⚡ NEWS IMPACT";
+        return "📡 LIVE MARKET";
     }
 
     private String newsCardText(JSONObject n) {
