@@ -224,107 +224,188 @@ public class MainActivity extends Activity {
         }
 
         if ("news".equals(section)) {
-            heading("📰 NEWS / MARKET INTELLIGENCE");
+            heading("📰 NEWS");
             JSONArray news = latest.optJSONArray("news");
+            card("IMPORTANT MARKET NEWS\n" + (news == null ? "0" : news.length()) +
+                " items in this feed\n\nTap any section from Home to switch between intelligence views.");
+
             if (news == null || news.length() == 0) {
-                card("No current/recent news in this pipeline run.");
+                card("NO NEWS\nNo current/recent news was supplied by the latest pipeline run.");
                 return;
             }
+
             for (int i = 0; i < news.length(); i++) {
                 JSONObject n = news.optJSONObject(i);
                 if (n == null) continue;
-                card(newsCardText(n));
+                card(
+                    "#" + (i + 1) + "  " + n.optString("symbols", "MARKET/SECTOR") + "\n\n" +
+                    n.optString("headline", "Headline unavailable") + "\n\n" +
+                    "TYPE: " + n.optString("news_type", "context").toUpperCase() +
+                    "   •   FRESHNESS: " + n.optString("freshness", "unknown").toUpperCase() + "\n" +
+                    "SOURCE: " + n.optString("source", "unknown") + "\n" +
+                    "PUBLISHED: " + n.optString("published", "unknown") + "\n\n" +
+                    n.optString("summary", "Summary unavailable.")
+                );
             }
         } else if ("impact".equals(section)) {
             heading("⚡ NEWS IMPACT");
-            card("How the headline is behaving in the market. This is evidence, not a prediction.");
+            card("CATALYST → MARKET REACTION\nThis screen separates the headline from observable market reaction. Missing market data remains unavailable.");
+
             JSONArray news = latest.optJSONArray("news");
             if (news == null || news.length() == 0) {
-                card("No news-impact data available.");
+                card("NO IMPACT DATA\nNo news items were supplied.");
                 return;
             }
+
             for (int i = 0; i < Math.min(10, news.length()); i++) {
                 JSONObject n = news.optJSONObject(i);
                 if (n == null) continue;
+
                 String symbols = n.optString("symbols", "MARKET/SECTOR");
-                String impact = n.optString("news_type", "context").toUpperCase();
-                String freshness = n.optString("freshness", "unknown");
-                card(symbols + "\n\nIMPACT CLASS: " + impact +
-                    "\nFRESHNESS: " + freshness +
-                    "\n\n" + n.optString("headline", "") +
-                    "\n\nMarket reaction is shown only where market data is available; no reaction is invented.");
+                String type = n.optString("news_type", "context").toUpperCase();
+                String freshness = n.optString("freshness", "unknown").toUpperCase();
+
+                card(
+                    symbols + "\n\n" +
+                    "IMPACT CLASS: " + type + "\n" +
+                    "FRESHNESS: " + freshness + "\n\n" +
+                    n.optString("headline", "Headline unavailable") + "\n\n" +
+                    "OBSERVED REACTION: Not available in this feed run.\n" +
+                    "No reaction is inferred when market evidence is missing."
+                );
             }
         } else if ("fno".equals(section)) {
             heading("📊 F&O / OPTIONS");
             JSONArray fno = latest.optJSONArray("fno_candidates");
+
             if (fno == null || fno.length() == 0) {
-                card("No F&O candidates were produced.");
+                card("NO F&O SETUPS\nThe latest pipeline run did not produce F&O candidates.");
                 return;
             }
+
+            card("F&O WATCHLIST\n" + fno.length() +
+                " candidate(s) ranked by the pipeline. A score is evidence for review, not a trade instruction.");
+
             for (int i = 0; i < fno.length(); i++) {
                 JSONObject x = fno.optJSONObject(i);
                 if (x == null) continue;
+
                 boolean ready = x.optBoolean("option_chain_available", false);
+                String chainStatus = ready ? "CHAIN READY" : "CHAIN UNAVAILABLE";
+
                 card(
-                    "#" + x.optInt("rank") + "  " + x.optString("symbol") + "\n\n" +
-                    "Spot: ₹" + x.optString("price", "n/a") +
-                    " | Change: " + x.optString("change_pct", "n/a") + "%\n" +
-                    "Setup score: " + x.optString("setup_quality_score", "n/a") + "/100\n" +
-                    "Status: " + (ready ? "CHAIN READY" : "CHAIN UNAVAILABLE") + "\n\n" +
-                    x.optString("option_summary", "Detailed option-chain data unavailable.")
+                    "RANK #" + x.optInt("rank") + "  •  " + x.optString("symbol", "UNKNOWN") + "\n\n" +
+                    "SPOT: ₹" + x.optString("price", "n/a") +
+                    "    CHANGE: " + x.optString("change_pct", "n/a") + "%\n" +
+                    "SETUP QUALITY: " + x.optString("setup_quality_score", "n/a") + "/100\n" +
+                    "OPTION CHAIN: " + chainStatus + "\n\n" +
+                    x.optString("option_summary", "Detailed option-chain data unavailable.") +
+                    (x.optString("chain_warning", "").isEmpty() ? "" : "\n\nWARNING: " + x.optString("chain_warning"))
                 );
+
                 if (ready) renderOptionLegs(x);
             }
         } else if ("breakouts".equals(section)) {
-            heading("🔥 TECHNICAL BREAKOUT WATCH");
+            heading("🔥 BREAKOUT WATCH");
+            card("TECHNICAL TRIGGER SCANNER\nChecks supplied price structure, previous-day levels, volume and EMA/RSI evidence. A watch signal is not a guaranteed breakout.");
+
             JSONArray breakouts = latest.optJSONArray("breakouts");
             if (breakouts == null || breakouts.length() == 0) {
-                card("No technical breakout watch candidates in this run.");
+                card("NO ACTIVE BREAKOUTS\nNo candidates met the scanner conditions in the latest pipeline run. This is preferable to inventing a setup.");
                 return;
             }
+
             for (int i = 0; i < breakouts.length(); i++) {
                 JSONObject b = breakouts.optJSONObject(i);
                 if (b == null) continue;
                 card(
-                    b.optString("symbol", "") + "  |  " + b.optString("status", "WATCH") + "\n\n" +
-                    b.optString("pattern", "") + "\n" +
-                    "Price: ₹" + b.optString("price", "n/a") +
-                    " | Change: " + b.optString("change_pct", "n/a") + "%\n" +
-                    "Trigger: ₹" + b.optString("trigger", "n/a") +
-                    " | Invalidation: ₹" + b.optString("invalidation", "n/a") + "\n" +
-                    "Distance: " + b.optString("distance_pct", "n/a") + "%" +
-                    " | Volume: " + b.optString("volume_ratio", "n/a") + "x\n\n" +
-                    b.optString("reason", "")
+                    b.optString("symbol", "UNKNOWN") + "  •  " +
+                    b.optString("status", "WATCH").toUpperCase() + "\n\n" +
+                    b.optString("pattern", "Pattern unavailable") + "\n\n" +
+                    "PRICE: ₹" + b.optString("price", "n/a") +
+                    "    CHANGE: " + b.optString("change_pct", "n/a") + "%\n" +
+                    "TRIGGER: ₹" + b.optString("trigger", "n/a") +
+                    "    INVALIDATION: ₹" + b.optString("invalidation", "n/a") + "\n" +
+                    "DISTANCE: " + b.optString("distance_pct", "n/a") + "%" +
+                    "    VOLUME: " + b.optString("volume_ratio", "n/a") + "x\n\n" +
+                    "WHY: " + b.optString("reason", "Reason unavailable.")
                 );
             }
         } else if ("ai".equals(section)) {
             heading("🤖 AI ANALYSIS");
-            JSONArray analyses = latest.optJSONArray("ai_analyses");
             String aiStatus = latest.optString("ai_status", "unknown");
-            card("AI STATUS: " + aiStatus.toUpperCase() +
-                "\n\nAI output is cross-checked against supplied news, technicals and option-chain evidence. Missing evidence stays unavailable.");
+            JSONArray analyses = latest.optJSONArray("ai_analyses");
+            JSONArray models = latest.optJSONArray("available_models");
+
+            card(
+                "AI ENGINE STATUS\n" +
+                aiStatus.toUpperCase() + "\n\n" +
+                "AI output is used as a cross-check against supplied news, technicals and F&O evidence. Missing evidence is never filled with guesses."
+            );
+
+            if (models != null && models.length() > 0) {
+                StringBuilder modelText = new StringBuilder("AVAILABLE MODELS\n");
+                for (int i = 0; i < models.length(); i++) {
+                    modelText.append("• ").append(models.optString(i)).append("\n");
+                }
+                card(modelText.toString().trim());
+            }
+
             if (analyses == null || analyses.length() == 0) {
-                card("No AI provider returned an analysis for this pipeline run.");
+                card("NO AI ANALYSIS\nNo AI provider returned an analysis for this pipeline run. The app will not manufacture a CE/PE or buy/sell call.");
                 return;
             }
+
             for (int i = 0; i < analyses.length(); i++) {
                 JSONObject item = analyses.optJSONObject(i);
-                if (item != null) card(item.optString("provider", "AI") + "\n\n" + item.optString("analysis", ""));
-            }
-        } else {
-            heading("📡 LIVE MARKET INTELLIGENCE");
-            JSONObject regime = latest.optJSONObject("market_regime");
-            if (regime != null) {
-                card("MARKET STRUCTURE\n" + regime.optString("label", "DATA_UNAVAILABLE"));
-                JSONObject indices = regime.optJSONObject("indices");
-                if (indices != null) {
-                    card("NIFTY / BANK NIFTY\n" + indices.toString().replace("{", "").replace("}", "").replace(",", "\n"));
+                if (item != null) {
+                    card(
+                        "PROVIDER: " + item.optString("provider", "AI") + "\n\n" +
+                        item.optString("analysis", "Analysis unavailable.")
+                    );
                 }
             }
-            card("Last pipeline update\n" + latest.optString("generated_at_utc", "unknown") +
-                "\n\nPhase: " + latest.optString("phase", "unknown") +
-                "\n\nUse NEWS for catalysts, F&O for option evidence, BREAKOUTS for technical triggers and AI ANALYSIS for cross-checking.");
+        } else {
+            heading("📡 LIVE MARKET");
+            JSONObject regime = latest.optJSONObject("market_regime");
+
+            if (regime == null) {
+                card("MARKET STRUCTURE\nUnavailable in the latest feed.");
+            } else {
+                card(
+                    "MARKET STRUCTURE\n" +
+                    regime.optString("label", "DATA_UNAVAILABLE") + "\n\n" +
+                    "This describes supplied market structure; it is not a forecast."
+                );
+
+                JSONObject indices = regime.optJSONObject("indices");
+                if (indices != null) {
+                    card("INDEX SNAPSHOT\n" + formatObjectLines(indices));
+                }
+            }
+
+            card(
+                "PIPELINE STATUS\n" +
+                "Phase: " + latest.optString("phase", "unknown").toUpperCase() + "\n" +
+                "Updated: " + latest.optString("generated_at_utc", "unknown") + "\n\n" +
+                "Use NEWS for catalysts • F&O for derivatives evidence • BREAKOUTS for technical triggers • AI ANALYSIS for cross-checking."
+            );
         }
+    }
+
+    private String formatObjectLines(JSONObject obj) {
+        if (obj == null) return "Unavailable";
+        StringBuilder out = new StringBuilder();
+        java.util.Iterator<String> keys = obj.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            Object value = obj.opt(key);
+            if (out.length() > 0) out.append("\n");
+            out.append(key.replace("_", " ").toUpperCase())
+               .append(": ")
+               .append(String.valueOf(value));
+        }
+        return out.toString();
     }
 
     private String sectionTitle(String section) {
