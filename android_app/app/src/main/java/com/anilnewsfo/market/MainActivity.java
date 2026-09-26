@@ -14,11 +14,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class MainActivity extends Activity {
-    // The Android repository is the live feed owner. Keep ANILNEWSFO as a fallback only.
+    // This repository is the single source of truth for the Android market feed.
     private static final String FEED_URL =
         "https://raw.githubusercontent.com/tanils/AnilNewandriodapp/main/data/app_feed.json";
-    private static final String FEED_MIRROR_URL =
-        "https://raw.githubusercontent.com/tanils/ANILNEWSFO/main/data/app_feed.json";
 
     private LinearLayout content;
     private TextView status;
@@ -88,13 +86,10 @@ public class MainActivity extends Activity {
         status.setText("Refreshing latest pipeline output…");
         new Thread(() -> {
             try {
-                // Add a cache-buster so a successful GitHub raw response cannot keep the old feed.
+                // Add a cache-buster so the app always asks for the current repository feed.
                 String json = fetchUrl(FEED_URL + "?v=" + System.currentTimeMillis());
                 if (json == null || json.trim().isEmpty()) {
-                    json = fetchUrl(FEED_MIRROR_URL + "?v=" + System.currentTimeMillis());
-                }
-                if (json == null || json.trim().isEmpty()) {
-                    throw new Exception("No feed available from primary or mirror source.");
+                    throw new Exception("No app feed is available from the Android repository.");
                 }
                 latest = new JSONObject(json);
                 runOnUiThread(() -> {
