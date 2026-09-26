@@ -15,7 +15,7 @@ import java.net.URL;
 
 public class MainActivity extends Activity {
     private static final String FEED_URL =
-        "https://raw.githubusercontent.com/tanils/AnilNewandriodapp/main/data/app_feed.json";
+        "https://raw.githubusercontent.com/tanils/ANILNEWSFO/main/data/app_feed.json";
 
     private LinearLayout content;
     private TextView status;
