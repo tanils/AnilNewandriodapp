@@ -1,6 +1,8 @@
 """End-to-end context-first market intelligence runner and Telegram delivery."""
 from __future__ import annotations
 import argparse, json, os
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 import requests
 from src.ai_crosscheck import cross_check
@@ -10,6 +12,8 @@ from src.news_intelligence import build_ai_payload, collect_fresh_news
 
 STATE_FILE = Path("data/news_intelligence_state.json")
 APP_FEED_FILE = Path("data/app_feed.json")
+DAILY_MASTER_FILE = Path("data/daily_master_analysis.json")
+IST = ZoneInfo("Asia/Kolkata")
 
 # Liquid NSE F&O universe used for candidate discovery. The AI may reject every
 # candidate; this is deliberately a discovery universe, not a recommendation list.
@@ -427,6 +431,31 @@ def save_state(phase, payload, result, report):
         encoding="utf-8",
     )
 
+def save_daily_master_analysis(phase, payload, result):
+    """Persist same-day hourly master-analysis state for the Android app."""
+    DAILY_MASTER_FILE.parent.mkdir(parents=True, exist_ok=True)
+    now = datetime.now(IST)
+    trading_date = now.date().isoformat()
+    try:
+        existing = json.loads(DAILY_MASTER_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        existing = {}
+    if existing.get("trading_date") != trading_date:
+        existing = {"trading_date": trading_date, "refreshes": []}
+    candidates = []
+    for item in payload.get("fno_option_candidates", [])[:5]:
+        candidates.append({"rank": item.get("rank"), "symbol": item.get("symbol"), "price": item.get("price"), "change_pct": item.get("change_pct"), "setup_quality_score": item.get("setup_quality_score"), "option_chain_available": item.get("option_chain_available", False)})
+    refresh = {"timestamp_ist": now.isoformat(), "phase": phase, "generated_at_utc": payload.get("generated_at_utc"), "news_count": len(payload.get("items", [])), "fno_candidate_count": len(payload.get("fno_option_candidates", [])), "ai_status": result.get("status", "unknown"), "market_regime": payload.get("market_regime", {}).get("label", "DATA_UNAVAILABLE"), "candidates": candidates}
+    existing["refreshes"] = ((existing.get("refreshes") or []) + [refresh])[-24:]
+    existing["last_refresh_ist"] = refresh["timestamp_ist"]
+    existing["refresh_count"] = len(existing["refreshes"])
+    existing["capital_inr"] = 25000
+    existing["focus"] = "Liquid F&O stocks + NIFTY + BANKNIFTY"
+    existing["strategy_rule"] = "No forced trade; require catalyst + price action + OI/option evidence + clear invalidation"
+    existing["next_refresh"] = "Next scheduled hourly market-intelligence run"
+    DAILY_MASTER_FILE.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
+    return existing
+
 def save_app_feed(phase, payload, result):
     """Write a secret-free feed consumed by the Android app."""
     APP_FEED_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -476,6 +505,7 @@ def save_app_feed(phase, payload, result):
         })
     analyses = [{"provider": x.get("provider", "AI"), "analysis": x.get("analysis", "")}
                 for x in result.get("analyses", [])]
+    daily_master = save_daily_master_analysis(phase, payload, result)
     APP_FEED_FILE.write_text(json.dumps({
         "app_version": 1,
         "phase": phase,
@@ -487,6 +517,8 @@ def save_app_feed(phase, payload, result):
         "ai_analyses": analyses,
         "ai_status": result.get("status", "unknown"),
         "available_models": result.get("available_models", []),
+        "daily_master_analysis": daily_master,
+        "master_status": "AI_UNAVAILABLE" if result.get("status") in {"NO_AI_AVAILABLE", "ERROR"} else "ANALYSIS_READY",
     }, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
