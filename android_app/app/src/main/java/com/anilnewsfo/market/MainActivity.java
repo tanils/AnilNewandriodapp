@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
 
     private LinearLayout content;
     private TextView status;
+    private boolean dashboardVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
     }
 
     private void renderDashboard() {
+        dashboardVisible = true;
         content.removeAllViews();
 
         LinearLayout liveRow = new LinearLayout(this);
@@ -190,6 +192,7 @@ public class MainActivity extends Activity {
     }
 
     private void loadSection(String section) {
+        dashboardVisible = false;
         clear();
         Button back = new Button(this);
         back.setText("←  BACK TO HOME");
@@ -341,7 +344,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (content != null && content.getChildCount() > 0) {
+        if (!dashboardVisible) {
             renderDashboard();
             return;
         }
