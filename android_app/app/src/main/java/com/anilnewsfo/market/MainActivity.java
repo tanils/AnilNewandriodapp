@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
 
     private LinearLayout content;
     private TextView status;
+    private boolean dashboardVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +56,24 @@ public class MainActivity extends Activity {
         body.setOrientation(LinearLayout.VERTICAL);
         content = body;
 
+        renderDashboard();
+
+        scroll.addView(body);
+        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
+        setContentView(root);
+    }
+
+    private void renderDashboard() {
+        dashboardVisible = true;
+        content.removeAllViews();
+
         LinearLayout liveRow = new LinearLayout(this);
         liveRow.setOrientation(LinearLayout.HORIZONTAL);
         liveRow.addView(dashboardCard("📡", "LIVE MARKET", "Market structure & session status", "live"),
                 new LinearLayout.LayoutParams(0, 112, 1));
         liveRow.addView(dashboardCard("📰", "NEWS", "Important market-moving news", "news"),
                 new LinearLayout.LayoutParams(0, 112, 1));
-        body.addView(liveRow);
+        content.addView(liveRow);
 
         LinearLayout fnoRow = new LinearLayout(this);
         fnoRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -69,7 +81,7 @@ public class MainActivity extends Activity {
                 new LinearLayout.LayoutParams(0, 112, 1));
         fnoRow.addView(dashboardCard("🔥", "BREAKOUTS", "Technical trigger watch", "breakouts"),
                 new LinearLayout.LayoutParams(0, 112, 1));
-        body.addView(fnoRow);
+        content.addView(fnoRow);
 
         LinearLayout aiRow = new LinearLayout(this);
         aiRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -77,7 +89,7 @@ public class MainActivity extends Activity {
                 new LinearLayout.LayoutParams(0, 112, 1));
         aiRow.addView(dashboardCard("⚡", "NEWS IMPACT", "Reaction vs headline", "impact"),
                 new LinearLayout.LayoutParams(0, 112, 1));
-        body.addView(aiRow);
+        content.addView(aiRow);
 
         Button refresh = new Button(this);
         refresh.setText("↻  REFRESH LIVE FEED");
@@ -85,11 +97,7 @@ public class MainActivity extends Activity {
         refresh.setOnClickListener(v -> loadFeed());
         LinearLayout.LayoutParams refreshParams = new LinearLayout.LayoutParams(-1, 56);
         refreshParams.setMargins(0, 10, 0, 8);
-        body.addView(refresh, refreshParams);
-
-        scroll.addView(body);
-        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
-        setContentView(root);
+        content.addView(refresh, refreshParams);
     }
 
     private Button dashboardCard(String icon, String title, String subtitle, String section) {
@@ -127,7 +135,7 @@ public class MainActivity extends Activity {
                 latest = new JSONObject(json);
                 runOnUiThread(() -> {
                     status.setText("Updated: " + latest.optString("generated_at_utc", "unknown"));
-                    loadSection("news");
+                    renderDashboard();
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {
@@ -184,7 +192,12 @@ public class MainActivity extends Activity {
     }
 
     private void loadSection(String section) {
+        dashboardVisible = false;
         clear();
+        Button back = new Button(this);
+        back.setText("←  BACK TO HOME");
+        back.setOnClickListener(v -> renderDashboard());
+        content.addView(back, new LinearLayout.LayoutParams(-1, 52));
         if (latest == null) {
             showMessage("No feed loaded yet.");
             return;
@@ -327,6 +340,15 @@ public class MainActivity extends Activity {
              .append(" | IV ").append(leg.optString("impliedVolatility", "n/a"))
              .append("\n");
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!dashboardVisible) {
+            renderDashboard();
+            return;
+        }
+        super.onBackPressed();
     }
 
     private void showMessage(String text) {
