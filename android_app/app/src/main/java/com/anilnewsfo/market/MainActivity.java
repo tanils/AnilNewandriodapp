@@ -16,6 +16,8 @@ import java.net.URL;
 public class MainActivity extends Activity {
     private static final String FEED_URL =
         "https://raw.githubusercontent.com/tanils/ANILNEWSFO/main/data/app_feed.json";
+    private static final String FEED_MIRROR_URL =
+        "https://raw.githubusercontent.com/tanils/AnilNewandriodapp/main/data/app_feed.json";
 
     private LinearLayout content;
     private TextView status;
@@ -85,16 +87,14 @@ public class MainActivity extends Activity {
         status.setText("Refreshing latest pipeline output…");
         new Thread(() -> {
             try {
-                HttpURLConnection c = (HttpURLConnection) new URL(FEED_URL).openConnection();
-                c.setConnectTimeout(10000);
-                c.setReadTimeout(15000);
-                c.setRequestMethod("GET");
-                StringBuilder out = new StringBuilder();
-                try (BufferedReader r = new BufferedReader(new InputStreamReader(c.getInputStream()))) {
-                    String line;
-                    while ((line = r.readLine()) != null) out.append(line);
+                String json = fetchUrl(FEED_URL);
+                if (json == null || json.trim().isEmpty()) {
+                    json = fetchUrl(FEED_MIRROR_URL);
                 }
-                c.disconnect();
+                if (json == null || json.trim().isEmpty()) {
+                    throw new Exception("No feed available from primary or mirror source.");
+                }
+                StringBuilder out = new StringBuilder(json);
                 latest = new JSONObject(out.toString());
                 runOnUiThread(() -> {
                     status.setText("Updated: " + latest.optString("generated_at_utc", "unknown"));
@@ -107,6 +107,27 @@ public class MainActivity extends Activity {
                 });
             }
         }).start();
+    }
+
+
+    private String fetchUrl(String url) throws Exception {
+        HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
+        c.setConnectTimeout(10000);
+        c.setReadTimeout(15000);
+        c.setRequestMethod("GET");
+        int code = c.getResponseCode();
+        if (code < 200 || code >= 300) {
+            c.disconnect();
+            return null;
+        }
+        StringBuilder out = new StringBuilder();
+        try (BufferedReader r = new BufferedReader(new InputStreamReader(c.getInputStream()))) {
+            String line;
+            while ((line = r.readLine()) != null) out.append(line);
+        } finally {
+            c.disconnect();
+        }
+        return out.toString();
     }
 
     private void clear() {
