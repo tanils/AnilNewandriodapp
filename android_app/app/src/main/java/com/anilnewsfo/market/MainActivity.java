@@ -91,8 +91,19 @@ public class MainActivity extends Activity {
                 new LinearLayout.LayoutParams(0, 112, 1));
         content.addView(aiRow);
 
-        Button refresh = new Button(this);
-        refresh.setText("↻  REFRESH LIVE FEED");
+        JSONObject dm = latest == null ? null : latest.optJSONObject("daily_master_analysis");
+        TextView master = new TextView(this);
+        String dmDate = dm == null ? "n/a" : dm.optString("trading_date", "n/a");
+        String dmStatus = latest == null ? "WAITING FOR FEED" : latest.optString("master_status", "UNKNOWN");
+        String dmLast = dm == null ? "n/a" : dm.optString("last_refresh_ist", "n/a");
+        int dmCount = dm == null ? 0 : dm.optInt("refresh_count", 0);
+        master.setText("🧠 DAILY MASTER ANALYSIS\\nDate: " + dmDate + " • Status: " + dmStatus + "\\nRefreshes today: " + dmCount + " • Last refresh: " + dmLast + "\\nCapital: ₹25,000 • Liquid F&O + NIFTY + BANKNIFTY\\nNo forced trade • catalyst + price + OI + invalidation required");
+        master.setTextSize(13);
+        master.setPadding(12, 12, 12, 12);
+        master.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
+        content.addView(master);
+
+        Button refresh = new Button(this);\n        refresh.setText("↻  REFRESH LIVE FEED");
         refresh.setTextSize(13);
         refresh.setOnClickListener(v -> loadFeed());
         LinearLayout.LayoutParams refreshParams = new LinearLayout.LayoutParams(-1, 56);
