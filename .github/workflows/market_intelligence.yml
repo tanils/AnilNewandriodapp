@@ -48,7 +48,7 @@ jobs:
         run: |
           python -m compileall -q src
           python -c "from src.market_intelligence import run; from src.news_intelligence import collect_fresh_news; print('Modules OK')"
-      - name: Validate secrets
+      - name: Check optional integrations
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -57,14 +57,12 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          test -n "$OPENAI_API_KEY" || echo "OPENAI_API_KEY not configured (optional fallback)"
-          test -n "$GEMINI_API_KEY" || echo "GEMINI_API_KEY not configured (optional fallback)"
-          test -n "$OPENROUTER_API_KEY" || echo "OPENROUTER_API_KEY not configured (optional fallback)"
-          test -n "$GROQ_API_KEY" || echo "GROQ_API_KEY not configured (optional fallback)"
-          if [ -z "$OPENAI_API_KEY" ] && [ -z "$GEMINI_API_KEY" ] && [ -z "$OPENROUTER_API_KEY" ] && [ -z "$GROQ_API_KEY" ]; then echo "At least one AI API key is required"; exit 1; fi
-          test -n "$TELEGRAM_BOT_TOKEN" || { echo "TELEGRAM_BOT_TOKEN is not configured"; exit 1; }
-          test -n "$TELEGRAM_CHAT_ID" || { echo "TELEGRAM_CHAT_ID is not configured"; exit 1; }
-      - name: Run market intelligence
+          [ -n "$OPENAI_API_KEY" ] && echo "OpenAI configured" || echo "OpenAI not configured"
+          [ -n "$GEMINI_API_KEY" ] && echo "Gemini configured" || echo "Gemini not configured"
+          [ -n "$OPENROUTER_API_KEY" ] && echo "OpenRouter configured" || echo "OpenRouter not configured"
+          [ -n "$GROQ_API_KEY" ] && echo "Groq configured" || echo "Groq not configured"
+          [ -n "$TELEGRAM_BOT_TOKEN" ] && [ -n "$TELEGRAM_CHAT_ID" ] && echo "Telegram configured" || echo "Telegram delivery disabled"
+      - name: Run market intelligence and generate Android feed
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
