@@ -91,8 +91,7 @@ public class MainActivity extends Activity {
                 new LinearLayout.LayoutParams(0, 112, 1));
         content.addView(aiRow);
 
-        Button refresh = new Button(this);
-        refresh.setText("↻  REFRESH LIVE FEED");
+        TextView master = new TextView(this);\n        master.setText("🧠 DAILY MASTER ANALYSIS — ₹25,000 — hourly refresh");\n        master.setTextSize(13);\n        master.setPadding(12, 12, 12, 12);\n        content.addView(master);\n\n        Button refresh = new Button(this);\n        refresh.setText("↻  REFRESH LIVE FEED");
         refresh.setTextSize(13);
         refresh.setOnClickListener(v -> loadFeed());
         LinearLayout.LayoutParams refreshParams = new LinearLayout.LayoutParams(-1, 56);
