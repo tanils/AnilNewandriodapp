@@ -289,14 +289,16 @@ public class MainActivity extends Activity {
         } else if ("fno".equals(section)) {
             heading("📊 F&O / OPTIONS");
             JSONArray fno = latest.optJSONArray("fno_candidates");
+            JSONArray movers = latest.optJSONArray("fno_movers");
 
             if (fno == null || fno.length() == 0) {
                 card("NO F&O SETUPS\nThe latest pipeline run did not produce F&O candidates.");
                 return;
             }
 
-            card("F&O WATCHLIST\n" + fno.length() +
-                " candidate(s) ranked by the pipeline. A score is evidence for review, not a trade instruction.");
+            int moverCount = movers == null ? 0 : movers.length();
+            card("LIVE F&O MOMENTUM\n" + moverCount + " movers detected (top gainers + top losers).\n" +
+                fno.length() + " deep-analysis candidate(s). A score is evidence for review, not a trade instruction.");
 
             for (int i = 0; i < fno.length(); i++) {
                 JSONObject x = fno.optJSONObject(i);
