@@ -6,7 +6,7 @@ import requests
 from src.ai_crosscheck import cross_check
 from src.event_memory import remember
 from src.market_data import snapshot, option_chain_summary
-from src.momentum_scanner import top_fno_movers, FALLBACK_FNO_UNIVERSE
+from src.momentum_scanner import top_fno_movers, filter_quality_movers, FALLBACK_FNO_UNIVERSE
 from src.news_intelligence import build_ai_payload, collect_fresh_news
 
 STATE_FILE = Path("data/news_intelligence_state.json")
@@ -27,6 +27,38 @@ def send_telegram(message: str) -> None:
             timeout=30,
         )
         r.raise_for_status()
+
+def _breakout_scan(cache: dict[str, dict]) -> list[dict]:
+    """Return simple evidence-backed daily breakout/breakdown watches."""
+    results = []
+    for symbol, market in cache.items():
+        if symbol in {"NIFTY", "BANKNIFTY"} or not market.get("available"):
+            continue
+        technical = market.get("technical") or {}
+        price = market.get("price")
+        change = market.get("change_pct")
+        prev_high = technical.get("previous_day_high")
+        prev_low = technical.get("previous_day_low")
+        rel_vol = technical.get("volume_vs_20d_avg")
+        if price is None or change is None or prev_high is None or prev_low is None:
+            continue
+        volume_ok = rel_vol is None or float(rel_vol) >= 1.0
+        if float(price) > float(prev_high) and volume_ok:
+            results.append({
+                "symbol": symbol, "status": "BREAKOUT", "pattern": "Previous-day-high breakout",
+                "price": price, "change_pct": change, "trigger": prev_high,
+                "invalidation": prev_high, "distance_pct": round((float(price)-float(prev_high))/float(prev_high)*100, 2),
+                "volume_ratio": rel_vol, "reason": "Price is above the previous-day high with acceptable relative-volume evidence.",
+            })
+        elif float(price) < float(prev_low) and volume_ok:
+            results.append({
+                "symbol": symbol, "status": "BREAKDOWN", "pattern": "Previous-day-low breakdown",
+                "price": price, "change_pct": change, "trigger": prev_low,
+                "invalidation": prev_low, "distance_pct": round((float(prev_low)-float(price))/float(prev_low)*100, 2),
+                "volume_ratio": rel_vol, "reason": "Price is below the previous-day low with acceptable relative-volume evidence.",
+            })
+    return sorted(results, key=lambda x: abs(float(x.get("change_pct") or 0)), reverse=True)[:10]
+
 
 def _candidate_score(symbol: str, market: dict, news_items: list[dict]) -> float:
     """Score setup quality for shortlist selection; never means probability of profit."""
@@ -95,24 +127,28 @@ def _market_cache(payload):
         if symbol in mover_map:
             cache[symbol]["mover"] = mover_map[symbol]
 
+    quality_movers, rejected_movers = filter_quality_movers(movers, cache)
+    quality_map = {item["symbol"]: item for item in quality_movers}
+    mover_map = quality_map
+    allowed_symbols = set(FALLBACK_FNO_UNIVERSE) | set(quality_map)
     ranked = sorted(
         ((symbol, market) for symbol, market in cache.items()
-         if symbol not in {"NIFTY", "BANKNIFTY"} and market.get("available")),
+         if symbol not in {"NIFTY", "BANKNIFTY"} and symbol in allowed_symbols and market.get("available")),
         key=lambda pair: (
-            1 if pair[0] in mover_map else 0,
+            1 if pair[0] in quality_map else 0,
             _candidate_score(pair[0], pair[1], news_items),
         ),
         reverse=True,
     )
     chain_symbols = ["NIFTY", "BANKNIFTY"]
-    for symbol, _ in ranked[:5]:
+    for symbol, _ in ranked[:8]:
         if symbol not in chain_symbols:
             chain_symbols.append(symbol)
     for symbol in chain_symbols:
         if symbol in cache:
             cache[symbol]["option_chain"] = option_chain_summary(symbol)
 
-    payload["fno_movers"] = movers
+    payload["fno_movers"] = quality_movers\n    payload["fno_mover_rejections"] = rejected_movers
     payload["fno_mover_errors"] = mover_errors
     payload["breakouts"] = _breakout_scan(cache)
     payload["fno_candidate_universe"] = discovery_symbols
