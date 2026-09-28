@@ -1,7 +1,7 @@
 {
   "app_version": 1,
-  "phase": "live_scan",
-  "generated_at_utc": "2026-09-28T16:00:31.970623+00:00",
+  "phase": "final_session",
+  "generated_at_utc": "2026-09-28T16:33:11.027262+00:00",
   "news": [
     {
       "headline": "PB Fintech shares can rally 91% after 2-day bloodbath, says Bernstein. Here’s why it remains bullish",
@@ -86,12 +86,22 @@
     {
       "headline": "HDFC Bank CEO transition nears; Jefferies sees rerating scope, sets target at Rs 880",
       "summary": "HDFC Bank could be nearing a leadership transition, with Jefferies saying greater clarity on CEO succession and a management reshuffle could improve execution and support a rerating. The brokerage retained its Buy rating and Rs 880 target, citing scope for stronger deposit growth, fee income and a better loan mix.",
-      "source": "Economic Times Markets",
+      "source": "Economic Times Stocks",
       "url": "https://economictimes.indiatimes.com/markets/stocks/news/hdfc-bank-ceo-transition-nears-jefferies-sees-rerating-scope-sets-target-at-rs-880/articleshow/134534153.cms",
       "published": "Mon, 28 Sep 2026 11:59:10 +0530",
       "freshness": "new",
       "news_type": "catalyst",
       "symbols": "HDFCBANK"
+    },
+    {
+      "headline": "Sebi allows Adani, four group firms to settle public-float violations",
+      "summary": "Gautam Adani and four companies in the Adani Group have settled regulatory violations with SEBI. The settlement involved a payment of 14.82 million rupees to address minimum public float rules. SEBI had previously accused the group of failing to comply with shareholding disclosure requirements. While investigations continue regarding stock price manipulation, the companies are not mandated to make corrective disclosures.",
+      "source": "Economic Times Markets",
+      "url": "https://economictimes.indiatimes.com/markets/stocks/news/sebi-allows-adani-four-group-firms-to-settle-public-float-violations/articleshow/134546792.cms",
+      "published": "Mon, 28 Sep 2026 21:37:59 +0530",
+      "freshness": "new",
+      "news_type": "catalyst",
+      "symbols": "MARKET/SECTOR"
     },
     {
       "headline": "AI trade enters a new phase: Why DBS favours AI adopters over capex-heavy players",
@@ -142,482 +152,215 @@
       "freshness": "new",
       "news_type": "catalyst",
       "symbols": "MARKET/SECTOR"
+    }
+  ],
+  "fno_movers": [
+    {
+      "symbol": "RSYSTEMS",
+      "change_pct": 20.0,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 1
     },
     {
-      "headline": "Global Market: European shares edge higher as British housebuilders rally",
-      "summary": "European shares edged higher, with the STOXX 600 gaining 0.3%, led by a sharp rally in British housebuilders. Gains were capped by rising oil prices and elevated bond yields, as investors assessed inflation and interest-rate risks. Energy stocks advanced, while miners declined, with markets awaiting central-bank officials’ comments on monetary policy.",
-      "source": "Economic Times Markets",
-      "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/global-market-european-shares-edge-higher-as-british-housebuilders-rally/articleshow/134537265.cms",
-      "published": "Mon, 28 Sep 2026 14:30:38 +0530",
-      "freshness": "new",
-      "news_type": "catalyst",
-      "symbols": "MARKET/SECTOR"
+      "symbol": "STARTECK",
+      "change_pct": 20.0,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 2
+    },
+    {
+      "symbol": "RETAIL",
+      "change_pct": 19.99,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 3
+    },
+    {
+      "symbol": "RTSPOWR",
+      "change_pct": 19.99,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 4
+    },
+    {
+      "symbol": "TNTELE",
+      "change_pct": 19.98,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 5
+    },
+    {
+      "symbol": "LANDSMILL",
+      "change_pct": 19.35,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 6
+    },
+    {
+      "symbol": "IWP",
+      "change_pct": 17.39,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 7
+    },
+    {
+      "symbol": "REPRO",
+      "change_pct": 15.51,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 8
+    },
+    {
+      "symbol": "DAMCAPITAL",
+      "change_pct": 15.43,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 9
+    },
+    {
+      "symbol": "BPLPHARMA",
+      "change_pct": 13.28,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 10
+    },
+    {
+      "symbol": "SMCGLOBAL",
+      "change_pct": 12.97,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 11
+    },
+    {
+      "symbol": "PRIMO",
+      "change_pct": 11.95,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 12
+    },
+    {
+      "symbol": "SSDL",
+      "change_pct": 11.85,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 13
+    },
+    {
+      "symbol": "SYNCOMF",
+      "change_pct": 11.42,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 14
+    },
+    {
+      "symbol": "WEALTH",
+      "change_pct": 10.79,
+      "direction": "GAINER",
+      "source": "NSE F&O movers",
+      "raw_rank": null,
+      "mover_rank": 15
     }
   ],
   "fno_candidates": [
     {
       "rank": 1,
-      "symbol": "POLICYBZR",
-      "price": 1151.300048828125,
-      "change_pct": -1.26,
-      "setup_quality_score": 58.53,
+      "symbol": "SMCGLOBAL",
+      "price": 97.2300033569336,
+      "change_pct": 13.59,
+      "setup_quality_score": 69.0,
       "option_chain_available": false,
       "expiry": null,
       "option_summary": "Expiry: None | PCR OI: n/a | Call OI: n/a | Put OI: n/a | Highest Call OI: n/a | Highest Put OI: n/a",
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-28T16:00:47.041662+00:00",
+      "chain_fetched_at_utc": "2026-09-28T16:33:27.132394+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     },
     {
       "rank": 2,
-      "symbol": "AXISBANK",
-      "price": 1209.9000244140625,
-      "change_pct": -1.02,
-      "setup_quality_score": 54.19,
+      "symbol": "SYNCOMF",
+      "price": 22.200000762939453,
+      "change_pct": 10.72,
+      "setup_quality_score": 69.0,
       "option_chain_available": false,
       "expiry": null,
       "option_summary": "Expiry: None | PCR OI: n/a | Call OI: n/a | Put OI: n/a | Highest Call OI: n/a | Highest Put OI: n/a",
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-28T16:00:47.494283+00:00",
+      "chain_fetched_at_utc": "2026-09-28T16:33:27.530513+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     },
     {
       "rank": 3,
-      "symbol": "SBIN",
-      "price": 962.0,
-      "change_pct": -2.14,
-      "setup_quality_score": 51.25,
+      "symbol": "RETAIL",
+      "price": 24.06999969482422,
+      "change_pct": 19.99,
+      "setup_quality_score": 61.0,
       "option_chain_available": false,
       "expiry": null,
       "option_summary": "Expiry: None | PCR OI: n/a | Call OI: n/a | Put OI: n/a | Highest Call OI: n/a | Highest Put OI: n/a",
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-28T16:00:47.900206+00:00",
+      "chain_fetched_at_utc": "2026-09-28T16:33:27.939958+00:00",
+      "chain_provider_timestamp": null,
+      "chain_warning": null
+    },
+    {
+      "rank": 4,
+      "symbol": "TNTELE",
+      "price": 11.890000343322754,
+      "change_pct": 19.98,
+      "setup_quality_score": 61.0,
+      "option_chain_available": false,
+      "expiry": null,
+      "option_summary": "Expiry: None | PCR OI: n/a | Call OI: n/a | Put OI: n/a | Highest Call OI: n/a | Highest Put OI: n/a",
+      "calls": [],
+      "puts": [],
+      "chain_source": "unavailable",
+      "chain_fetched_at_utc": "2026-09-28T16:33:28.275884+00:00",
+      "chain_provider_timestamp": null,
+      "chain_warning": null
+    },
+    {
+      "rank": 5,
+      "symbol": "PRIMO",
+      "price": 28.1299991607666,
+      "change_pct": 11.27,
+      "setup_quality_score": 61.0,
+      "option_chain_available": false,
+      "expiry": null,
+      "option_summary": "Expiry: None | PCR OI: n/a | Call OI: n/a | Put OI: n/a | Highest Call OI: n/a | Highest Put OI: n/a",
+      "calls": [],
+      "puts": [],
+      "chain_source": "unavailable",
+      "chain_fetched_at_utc": "2026-09-28T16:33:28.606940+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     }
   ],
-  "market_regime": {
-    "label": "BEARISH_STRUCTURE",
-    "indices": {
-      "NIFTY": {
-        "price": 22780.25,
-        "change_pct": -1.56,
-        "structure": "BEARISH_STRUCTURE",
-        "ema20": 23447.42,
-        "ema50": 23763.68
-      },
-      "BANKNIFTY": {
-        "price": 54471.6484375,
-        "change_pct": -1.99,
-        "structure": "BEARISH_STRUCTURE",
-        "ema20": 56305.87,
-        "ema50": 56761.05
-      }
-    }
-  },
-  "breakouts": [
-    {
-      "symbol": "SBIN",
-      "price": 962.0,
-      "change_pct": -2.14,
-      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
-      "trigger": 977.0,
-      "invalidation": 977.0,
-      "distance_pct": 1.54,
-      "volume_ratio": 1.38,
-      "rsi14": 34.61,
-      "ema20": 998.24,
-      "ema50": 1016.56,
-      "status": "READY",
-      "reason": "price is below previous-day low; volume 1.38x 20D average; bearish EMA20 < EMA50 structure; RSI14 34.6",
-      "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T16:00:36.653567+00:00"
-    },
-    {
-      "symbol": "BEL",
-      "price": 385.5,
-      "change_pct": -2.05,
-      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
-      "trigger": 388.6,
-      "invalidation": 388.6,
-      "distance_pct": 0.8,
-      "volume_ratio": 1.25,
-      "rsi14": 30.32,
-      "ema20": 397.68,
-      "ema50": 402.9,
-      "status": "READY",
-      "reason": "price is below previous-day low; volume 1.25x 20D average; bearish EMA20 < EMA50 structure; RSI14 30.3",
-      "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T16:00:34.834990+00:00"
-    },
-    {
-      "symbol": "SHRIRAMFIN",
-      "price": 976.2999877929688,
-      "change_pct": -1.79,
-      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
-      "trigger": 986.4,
-      "invalidation": 986.4,
-      "distance_pct": 1.02,
-      "volume_ratio": 1.23,
-      "rsi14": 32.9,
-      "ema20": 1019.48,
-      "ema50": 1039.11,
-      "status": "READY",
-      "reason": "price is below previous-day low; volume 1.23x 20D average; bearish EMA20 < EMA50 structure; RSI14 32.9",
-      "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T16:00:38.058704+00:00"
-    },
-    {
-      "symbol": "KOTAKBANK",
-      "price": 401.54998779296875,
-      "change_pct": -0.61,
-      "pattern": "NEAR PREVIOUS-DAY-LOW",
-      "trigger": 399.3,
-      "invalidation": 407.95,
-      "distance_pct": 0.56,
-      "volume_ratio": 1.44,
-      "rsi14": 31.13,
-      "ema20": 410.92,
-      "ema50": 405.83,
-      "status": "WATCH",
-      "reason": "price is close to previous-day low; volume 1.44x 20D average; RSI14 31.1",
-      "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T16:00:36.920674+00:00"
-    },
-    {
-      "symbol": "BAJFINANCE",
-      "price": 985.0,
-      "change_pct": -1.19,
-      "pattern": "NEAR PREVIOUS-DAY-LOW",
-      "trigger": 980.2,
-      "invalidation": 997.2,
-      "distance_pct": 0.49,
-      "volume_ratio": 1.33,
-      "rsi14": 35.86,
-      "ema20": 1027.07,
-      "ema50": 1037.89,
-      "status": "WATCH",
-      "reason": "price is close to previous-day low; volume 1.33x 20D average; bearish EMA20 < EMA50 structure; RSI14 35.9",
-      "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T16:00:37.476686+00:00"
-    },
-    {
-      "symbol": "ADANIPOWER",
-      "price": 196.13999938964844,
-      "change_pct": -3.26,
-      "pattern": "NEAR PREVIOUS-DAY-LOW",
-      "trigger": 196.1,
-      "invalidation": 203.6,
-      "distance_pct": 0.02,
-      "volume_ratio": 1.24,
-      "rsi14": 35.34,
-      "ema20": 205.05,
-      "ema50": 208.11,
-      "status": "WATCH",
-      "reason": "price is close to previous-day low; volume 1.24x 20D average; bearish EMA20 < EMA50 structure; RSI14 35.3",
-      "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T16:00:41.352447+00:00"
-    },
-    {
-      "symbol": "TITAN",
-      "price": 4819.5,
-      "change_pct": -1.32,
-      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
-      "trigger": 4821.5,
-      "invalidation": 4821.5,
-      "distance_pct": 0.04,
-      "volume_ratio": 1.16,
-      "rsi14": 38.1,
-      "ema20": 4920.73,
-      "ema50": 4880.52,
-      "status": "CONFIRM",
-      "reason": "price is below previous-day low; volume 1.16x 20D average; confirmation needed; RSI14 38.1",
-      "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T16:00:45.249679+00:00"
-    },
-    {
-      "symbol": "RELIANCE",
-      "price": 1197.5999755859375,
-      "change_pct": -2.32,
-      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
-      "trigger": 1210.5,
-      "invalidation": 1210.5,
-      "distance_pct": 1.07,
-      "volume_ratio": 1.15,
-      "rsi14": 23.75,
-      "ema20": 1252.67,
-      "ema50": 1279.1,
-      "status": "CONFIRM",
-      "reason": "price is below previous-day low; volume 1.15x 20D average; confirmation needed; bearish EMA20 < EMA50 structure; RSI14 23.8",
-      "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T16:00:35.873410+00:00"
-    },
-    {
-      "symbol": "JINDALSTEL",
-      "price": 1139.5999755859375,
-      "change_pct": -2.16,
-      "pattern": "NEAR PREVIOUS-DAY-LOW",
-      "trigger": 1137.0,
-      "invalidation": 1168.9,
-      "distance_pct": 0.23,
-      "volume_ratio": 1.06,
-      "rsi14": 50.79,
-      "ema20": 1139.64,
-      "ema50": 1129.26,
-      "status": "WATCH",
-      "reason": "price is close to previous-day low; volume 1.06x 20D average; confirmation needed; RSI14 50.8",
-      "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T16:00:40.889450+00:00"
-    },
-    {
-      "symbol": "WIPRO",
-      "price": 161.55999755859375,
-      "change_pct": -1.5,
-      "pattern": "PREVIOUS-DAY-LOW BREAKDOWN",
-      "trigger": 161.66,
-      "invalidation": 161.66,
-      "distance_pct": 0.06,
-      "volume_ratio": 1.01,
-      "rsi14": 27.26,
-      "ema20": 168.53,
-      "ema50": 174.39,
-      "status": "CONFIRM",
-      "reason": "price is below previous-day low; volume 1.01x 20D average; confirmation needed; bearish EMA20 < EMA50 structure; RSI14 27.3",
-      "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T16:00:42.982624+00:00"
-    }
-  ],
+  "breakouts": [],
+  "strategy": "top 15 F&O gainers + top 15 F&O losers -> catalyst + momentum + breakout + OI/options -> CE/PE or NO TRADE",
   "ai_analyses": [],
   "ai_status": "NO_AI_AVAILABLE",
-  "available_models": [],
-  "daily_master_analysis": {
-    "trading_date": "2026-09-28",
-    "refreshes": [
-      {
-        "timestamp_ist": "2026-09-28T00:49:46.737289+05:30",
-        "phase": "night",
-        "generated_at_utc": "2026-09-27T19:19:29.064216+00:00",
-        "news_count": 40,
-        "fno_candidate_count": 3,
-        "ai_status": "NO_AI_AVAILABLE",
-        "market_regime": "BEARISH_STRUCTURE",
-        "candidates": [
-          {
-            "rank": 1,
-            "symbol": "POLICYBZR",
-            "price": 1166.0,
-            "change_pct": -3.41,
-            "setup_quality_score": 60.12,
-            "option_chain_available": false
-          },
-          {
-            "rank": 2,
-            "symbol": "ADANIPORTS",
-            "price": 1788.0,
-            "change_pct": 0.15,
-            "setup_quality_score": 52.73,
-            "option_chain_available": false
-          },
-          {
-            "rank": 3,
-            "symbol": "INFY",
-            "price": 1000.2000122070312,
-            "change_pct": -1.41,
-            "setup_quality_score": 49.72,
-            "option_chain_available": false
-          }
-        ]
-      },
-      {
-        "timestamp_ist": "2026-09-28T15:39:56.287943+05:30",
-        "phase": "pre_market",
-        "generated_at_utc": "2026-09-28T10:09:43.731923+00:00",
-        "news_count": 40,
-        "fno_candidate_count": 3,
-        "ai_status": "NO_AI_AVAILABLE",
-        "market_regime": "BEARISH_STRUCTURE",
-        "candidates": [
-          {
-            "rank": 1,
-            "symbol": "POLICYBZR",
-            "price": 1151.300048828125,
-            "change_pct": -1.26,
-            "setup_quality_score": 58.53,
-            "option_chain_available": false
-          },
-          {
-            "rank": 2,
-            "symbol": "AXISBANK",
-            "price": 1209.9000244140625,
-            "change_pct": -1.02,
-            "setup_quality_score": 54.19,
-            "option_chain_available": false
-          },
-          {
-            "rank": 3,
-            "symbol": "SBIN",
-            "price": 962.0,
-            "change_pct": -2.14,
-            "setup_quality_score": 51.25,
-            "option_chain_available": false
-          }
-        ]
-      },
-      {
-        "timestamp_ist": "2026-09-28T16:44:32.045268+05:30",
-        "phase": "live_scan",
-        "generated_at_utc": "2026-09-28T11:14:17.974725+00:00",
-        "news_count": 40,
-        "fno_candidate_count": 3,
-        "ai_status": "NO_AI_AVAILABLE",
-        "market_regime": "BEARISH_STRUCTURE",
-        "candidates": [
-          {
-            "rank": 1,
-            "symbol": "POLICYBZR",
-            "price": 1151.300048828125,
-            "change_pct": -1.26,
-            "setup_quality_score": 58.53,
-            "option_chain_available": false
-          },
-          {
-            "rank": 2,
-            "symbol": "AXISBANK",
-            "price": 1209.9000244140625,
-            "change_pct": -1.02,
-            "setup_quality_score": 54.19,
-            "option_chain_available": false
-          },
-          {
-            "rank": 3,
-            "symbol": "SBIN",
-            "price": 962.0,
-            "change_pct": -2.14,
-            "setup_quality_score": 51.25,
-            "option_chain_available": false
-          }
-        ]
-      },
-      {
-        "timestamp_ist": "2026-09-28T17:30:48.300757+05:30",
-        "phase": "live_scan",
-        "generated_at_utc": "2026-09-28T12:00:34.346647+00:00",
-        "news_count": 40,
-        "fno_candidate_count": 3,
-        "ai_status": "NO_AI_AVAILABLE",
-        "market_regime": "BEARISH_STRUCTURE",
-        "candidates": [
-          {
-            "rank": 1,
-            "symbol": "POLICYBZR",
-            "price": 1151.300048828125,
-            "change_pct": -1.26,
-            "setup_quality_score": 58.53,
-            "option_chain_available": false
-          },
-          {
-            "rank": 2,
-            "symbol": "AXISBANK",
-            "price": 1209.9000244140625,
-            "change_pct": -1.02,
-            "setup_quality_score": 54.19,
-            "option_chain_available": false
-          },
-          {
-            "rank": 3,
-            "symbol": "SBIN",
-            "price": 962.0,
-            "change_pct": -2.14,
-            "setup_quality_score": 51.25,
-            "option_chain_available": false
-          }
-        ]
-      },
-      {
-        "timestamp_ist": "2026-09-28T20:00:22.886854+05:30",
-        "phase": "live_scan",
-        "generated_at_utc": "2026-09-28T14:30:08.756597+00:00",
-        "news_count": 40,
-        "fno_candidate_count": 3,
-        "ai_status": "NO_AI_AVAILABLE",
-        "market_regime": "BEARISH_STRUCTURE",
-        "candidates": [
-          {
-            "rank": 1,
-            "symbol": "POLICYBZR",
-            "price": 1151.300048828125,
-            "change_pct": -1.26,
-            "setup_quality_score": 58.53,
-            "option_chain_available": false
-          },
-          {
-            "rank": 2,
-            "symbol": "AXISBANK",
-            "price": 1209.9000244140625,
-            "change_pct": -1.02,
-            "setup_quality_score": 54.19,
-            "option_chain_available": false
-          },
-          {
-            "rank": 3,
-            "symbol": "SBIN",
-            "price": 962.0,
-            "change_pct": -2.14,
-            "setup_quality_score": 51.25,
-            "option_chain_available": false
-          }
-        ]
-      },
-      {
-        "timestamp_ist": "2026-09-28T21:30:52.948868+05:30",
-        "phase": "live_scan",
-        "generated_at_utc": "2026-09-28T16:00:31.970623+00:00",
-        "news_count": 40,
-        "fno_candidate_count": 3,
-        "ai_status": "NO_AI_AVAILABLE",
-        "market_regime": "BEARISH_STRUCTURE",
-        "candidates": [
-          {
-            "rank": 1,
-            "symbol": "POLICYBZR",
-            "price": 1151.300048828125,
-            "change_pct": -1.26,
-            "setup_quality_score": 58.53,
-            "option_chain_available": false
-          },
-          {
-            "rank": 2,
-            "symbol": "AXISBANK",
-            "price": 1209.9000244140625,
-            "change_pct": -1.02,
-            "setup_quality_score": 54.19,
-            "option_chain_available": false
-          },
-          {
-            "rank": 3,
-            "symbol": "SBIN",
-            "price": 962.0,
-            "change_pct": -2.14,
-            "setup_quality_score": 51.25,
-            "option_chain_available": false
-          }
-        ]
-      }
-    ],
-    "last_refresh_ist": "2026-09-28T21:30:52.948868+05:30",
-    "refresh_count": 6,
-    "capital_inr": 25000,
-    "focus": "Liquid F&O stocks + NIFTY + BANKNIFTY",
-    "strategy_rule": "No forced trade; require catalyst + price action + OI/option evidence + clear invalidation",
-    "next_refresh": "Next scheduled hourly market-intelligence run"
-  },
-  "master_status": "AI_UNAVAILABLE"
+  "available_models": []
 }
