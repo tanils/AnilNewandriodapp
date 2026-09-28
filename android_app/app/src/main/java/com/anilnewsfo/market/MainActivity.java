@@ -90,13 +90,10 @@ public class MainActivity extends Activity {
                 new LinearLayout.LayoutParams(0, 112, 1));
         content.addView(aiRow);
 
-        JSONObject dm = latest == null ? null : latest.optJSONObject("daily_master_analysis");
         TextView master = new TextView(this);
-        String dmDate = dm == null ? "n/a" : dm.optString("trading_date", "n/a");
-        String dmStatus = latest == null ? "WAITING FOR FEED" : latest.optString("master_status", "UNKNOWN");
-        String dmLast = dm == null ? "n/a" : dm.optString("last_refresh_ist", "n/a");
-        int dmCount = dm == null ? 0 : dm.optInt("refresh_count", 0);
-        master.setText("🧠 DAILY MASTER ANALYSIS\\nDate: " + dmDate + " • Status: " + dmStatus + "\\nRefreshes today: " + dmCount + " • Last refresh: " + dmLast + "\\nCapital: ₹25,000 • Liquid F&O + NIFTY + BANKNIFTY\\nNo forced trade • catalyst + price + OI + invalidation required");
+        String phase = latest == null ? "WAITING FOR FEED" : latest.optString("phase", "UNKNOWN");
+        String strategy = latest == null ? "Waiting for pipeline output." : latest.optString("strategy", "Top F&O momentum + catalyst + technical + OI/options analysis.");
+        master.setText("🧠 DAILY MASTER ANALYSIS\\nPhase: " + phase.toUpperCase() + "\\nCapital: ₹25,000 • Liquid F&O + NIFTY + BANKNIFTY\\n" + strategy + "\\nNo forced trade • catalyst + price + OI + invalidation required");
         master.setTextSize(13);
         master.setPadding(12, 12, 12, 12);
         master.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
@@ -296,6 +293,19 @@ public class MainActivity extends Activity {
 
             card("F&O WATCHLIST\n" + fno.length() +
                 " candidate(s) ranked by the pipeline. A score is evidence for review, not a trade instruction.");
+
+            if (movers != null && movers.length() > 0) {
+                StringBuilder moverText = new StringBuilder("TOP F&O MOVERS\\n");
+                for (int i = 0; i < Math.min(30, movers.length()); i++) {
+                    JSONObject m = movers.optJSONObject(i);
+                    if (m == null) continue;
+                    moverText.append("#").append(m.optInt("mover_rank", i + 1)).append(" ")
+                        .append(m.optString("symbol", "UNKNOWN")).append("  ")
+                        .append(m.optString("direction", "")).append("  ")
+                        .append(m.optString("change_pct", "n/a")).append("%\\n");
+                }
+                card(moverText.toString().trim());
+            }
 
             for (int i = 0; i < fno.length(); i++) {
                 JSONObject x = fno.optJSONObject(i);
