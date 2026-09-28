@@ -148,6 +148,7 @@ def snapshot(symbol: str) -> dict[str, Any]:
                 "previous_close": float(price_info["previousClose"]) if price_info.get("previousClose") is not None else None,
                 "change_pct": float(price_info["pChange"]) if price_info.get("pChange") is not None else None,
                 "volume": (data.get("marketDeptOrderBook") or {}).get("totalTradedVolume"),
+                "traded_value": (data.get("marketDeptOrderBook") or {}).get("totalTradedValue"),
                 "available": True,
                 "fetched_at_utc": _utc_now(),
             })
