@@ -114,6 +114,7 @@ def _market_cache(payload):
 
     payload["fno_movers"] = movers
     payload["fno_mover_errors"] = mover_errors
+    payload["breakouts"] = _breakout_scan(cache)
     payload["fno_candidate_universe"] = discovery_symbols
     payload["fno_option_candidates"] = [
         {
@@ -347,7 +348,7 @@ def save_app_feed(phase, payload, result):
             "news": news,
             "fno_movers": payload.get("fno_movers", [])[:30],
             "fno_candidates": fno,
-            "breakouts": [],
+            "breakouts": payload.get("breakouts", [])[:10],
             "strategy": "top 15 F&O gainers + top 15 F&O losers -> catalyst + momentum + breakout + OI/options -> CE/PE or NO TRADE",
             "ai_analyses": analyses,
             "ai_status": result.get("status", "unknown"),
