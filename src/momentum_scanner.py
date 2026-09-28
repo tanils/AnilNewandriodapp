@@ -61,7 +61,7 @@ def _quality_gate(market: dict[str, Any]) -> tuple[bool, list[str]]:
     if price is None or float(price) < 100:
         reasons.append("low price")
     traded_value = market.get("traded_value")
-    if traded_value is not None and float(traded_value) < 25_000_000:
+    if traded_value is not None and float(traded_value) < 250_000_000:
         reasons.append("low traded value")
     technical = market.get("technical") or {}
     rel_vol = technical.get("volume_vs_20d_avg")
