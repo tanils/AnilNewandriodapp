@@ -1,7 +1,7 @@
 {
   "app_version": 1,
-  "phase": "pre_market",
-  "generated_at_utc": "2026-09-28T10:09:43.731923+00:00",
+  "phase": "live_scan",
+  "generated_at_utc": "2026-09-28T11:14:17.974725+00:00",
   "news": [
     {
       "headline": "PB Fintech shares can rally 91% after 2-day bloodbath, says Bernstein. Here’s why it remains bullish",
@@ -24,16 +24,6 @@
       "symbols": "MARKET/SECTOR"
     },
     {
-      "headline": "Orient Cables IPO Day 2: GMP signals 33% listing premium; check subscription and key details",
-      "summary": "Orient Cables IPO entered Day 2 of bidding with a 33% listing premium signal in the grey market. The Rs 552 crore issue was subscribed 1.96 times overall on Day 1. The price band is fixed at Rs 258-Rs 272 per share, with listing expected on BSE and NSE.",
-      "source": "Economic Times Markets",
-      "url": "https://economictimes.indiatimes.com/markets/ipos/fpos/orient-cables-ipo-day-2-gmp-signals-33-listing-premium-check-subscription-and-key-details/articleshow/134531289.cms",
-      "published": "Mon, 28 Sep 2026 09:30:33 +0530",
-      "freshness": "new",
-      "news_type": "catalyst",
-      "symbols": "BSE"
-    },
-    {
       "headline": "Fortis Healthcare shares in focus as Supreme Court allows forensic audit to proceed",
       "summary": "Fortis Healthcare shares will be in focus after the Supreme Court allowed a forensic audit of the hospital chain to proceed, while clarifying that observations made by the Delhi High Court were limited to the audit proceedings. Fortis said no liability, penalty or fine has been imposed and reiterated that it had no role in the transfer of shares by its erstwhile promoters.",
       "source": "Economic Times Stocks",
@@ -42,6 +32,16 @@
       "freshness": "new",
       "news_type": "catalyst",
       "symbols": "BSE"
+    },
+    {
+      "headline": "Oil woes push rupee to over one-week low, RBI caps fall near 96/USD",
+      "summary": "On Monday, the Indian rupee plummeted to its lowest mark in over a week, driven by soaring oil prices. Investors reacted to mounting geopolitical tensions, leading to an uptick in bond yields and a dip in stock values within the region. State-run banks intervened by selling dollars, likely under the guidance of the Reserve Bank of India, which helped to mitigate further declines in the currency's value.",
+      "source": "Economic Times Markets",
+      "url": "https://economictimes.indiatimes.com/markets/forex/forex-news/oil-woes-push-rupee-to-over-one-week-low-rbi-caps-fall-near-96/usd/articleshow/134539275.cms",
+      "published": "Mon, 28 Sep 2026 15:57:19 +0530",
+      "freshness": "new",
+      "news_type": "catalyst",
+      "symbols": "MARKET/SECTOR"
     },
     {
       "headline": "Jefferies names Max Financial as its top insurance pick, sees 41% upside despite target cut",
@@ -94,6 +94,16 @@
       "symbols": "HDFCBANK"
     },
     {
+      "headline": "US Market: Fed's Hammack warns against inflation becoming entrenched in economy",
+      "summary": "Federal Reserve Bank of Cleveland President Beth Hammack warned that persistently high inflation could entrench elevated price expectations among US households and businesses. She said monetary policy may not yet be sufficiently restrictive, citing resilient demand, strong business investment and a stable labour market. Hammack also noted that rising US bond yields reflect higher real interest rates and a solid economic outlook.",
+      "source": "Economic Times Markets",
+      "url": "https://economictimes.indiatimes.com/markets/us-stocks/wall-street-guide/us-market-feds-hammack-warns-against-inflation-becoming-entrenched-in-economy/articleshow/134539089.cms",
+      "published": "Mon, 28 Sep 2026 15:50:01 +0530",
+      "freshness": "new",
+      "news_type": "catalyst",
+      "symbols": "MARKET/SECTOR"
+    },
+    {
       "headline": "Global Market: Eurozone bond yields rise as oil climbs, inflation data eyed",
       "summary": "Eurozone government bond yields rose as higher oil prices and uncertainty over the US-Iran conflict heightened inflation and interest-rate concerns. Germany’s 10-year yield reached its highest level since 2009, while markets awaited eurozone inflation data. Investors expect September inflation to accelerate, potentially reinforcing expectations of further European Central Bank rate increases.",
       "source": "Economic Times Markets",
@@ -142,16 +152,6 @@
       "freshness": "new",
       "news_type": "catalyst",
       "symbols": "BSE"
-    },
-    {
-      "headline": "Micron earnings preview: Tight DRAM supply, HBM demand set stage for Q4 results",
-      "summary": "Micron’s Q4 results face high expectations as AI-driven memory demand, tight DRAM and HBM supply, and pricing power support growth. Investors will focus on fiscal 2027 guidance, HBM4 demand, margins, capital spending and whether the memory upcycle can sustain elevated valuations and profitability.",
-      "source": "Economic Times Markets",
-      "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/micron-earnings-preview-tight-dram-supply-hbm-demand-set-stage-for-q4-results/slideshow/134534608.cms",
-      "published": "Mon, 28 Sep 2026 12:06:37 +0530",
-      "freshness": "new",
-      "news_type": "catalyst",
-      "symbols": "MARKET/SECTOR"
     }
   ],
   "fno_candidates": [
@@ -167,7 +167,7 @@
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-28T10:09:50.575797+00:00",
+      "chain_fetched_at_utc": "2026-09-28T11:14:26.034538+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     },
@@ -183,7 +183,7 @@
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-28T10:09:50.892390+00:00",
+      "chain_fetched_at_utc": "2026-09-28T11:14:26.383188+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     },
@@ -199,7 +199,7 @@
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-28T10:09:51.195386+00:00",
+      "chain_fetched_at_utc": "2026-09-28T11:14:26.750864+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     }
@@ -239,7 +239,7 @@
       "status": "READY",
       "reason": "price is below previous-day low; volume 1.38x 20D average; bearish EMA20 < EMA50 structure; RSI14 34.6",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T10:09:45.722869+00:00"
+      "fetched_at_utc": "2026-09-28T11:14:20.169094+00:00"
     },
     {
       "symbol": "BEL",
@@ -256,7 +256,7 @@
       "status": "READY",
       "reason": "price is below previous-day low; volume 1.25x 20D average; bearish EMA20 < EMA50 structure; RSI14 30.3",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T10:09:44.934020+00:00"
+      "fetched_at_utc": "2026-09-28T11:14:19.537957+00:00"
     },
     {
       "symbol": "SHRIRAMFIN",
@@ -273,7 +273,7 @@
       "status": "READY",
       "reason": "price is below previous-day low; volume 1.23x 20D average; bearish EMA20 < EMA50 structure; RSI14 32.9",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T10:09:46.478932+00:00"
+      "fetched_at_utc": "2026-09-28T11:14:21.111017+00:00"
     },
     {
       "symbol": "KOTAKBANK",
@@ -290,7 +290,7 @@
       "status": "WATCH",
       "reason": "price is close to previous-day low; volume 1.44x 20D average; RSI14 31.1",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T10:09:45.888902+00:00"
+      "fetched_at_utc": "2026-09-28T11:14:20.368530+00:00"
     },
     {
       "symbol": "BAJFINANCE",
@@ -307,7 +307,7 @@
       "status": "WATCH",
       "reason": "price is close to previous-day low; volume 1.33x 20D average; bearish EMA20 < EMA50 structure; RSI14 35.9",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T10:09:46.185712+00:00"
+      "fetched_at_utc": "2026-09-28T11:14:20.766785+00:00"
     },
     {
       "symbol": "ADANIPOWER",
@@ -324,7 +324,7 @@
       "status": "WATCH",
       "reason": "price is close to previous-day low; volume 1.24x 20D average; bearish EMA20 < EMA50 structure; RSI14 35.3",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T10:09:47.877593+00:00"
+      "fetched_at_utc": "2026-09-28T11:14:22.852497+00:00"
     },
     {
       "symbol": "TITAN",
@@ -341,7 +341,7 @@
       "status": "CONFIRM",
       "reason": "price is below previous-day low; volume 1.16x 20D average; confirmation needed; RSI14 38.1",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T10:09:49.338147+00:00"
+      "fetched_at_utc": "2026-09-28T11:14:24.555084+00:00"
     },
     {
       "symbol": "RELIANCE",
@@ -358,7 +358,7 @@
       "status": "CONFIRM",
       "reason": "price is below previous-day low; volume 1.15x 20D average; confirmation needed; bearish EMA20 < EMA50 structure; RSI14 23.8",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T10:09:45.405792+00:00"
+      "fetched_at_utc": "2026-09-28T11:14:19.854563+00:00"
     },
     {
       "symbol": "JINDALSTEL",
@@ -375,7 +375,7 @@
       "status": "WATCH",
       "reason": "price is close to previous-day low; volume 1.06x 20D average; confirmation needed; RSI14 50.8",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T10:09:47.633523+00:00"
+      "fetched_at_utc": "2026-09-28T11:14:22.542387+00:00"
     },
     {
       "symbol": "WIPRO",
@@ -392,7 +392,7 @@
       "status": "CONFIRM",
       "reason": "price is below previous-day low; volume 1.01x 20D average; confirmation needed; bearish EMA20 < EMA50 structure; RSI14 27.3",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T10:09:48.488249+00:00"
+      "fetched_at_utc": "2026-09-28T11:14:23.581225+00:00"
     }
   ],
   "ai_analyses": [],
@@ -470,10 +470,45 @@
             "option_chain_available": false
           }
         ]
+      },
+      {
+        "timestamp_ist": "2026-09-28T16:44:32.045268+05:30",
+        "phase": "live_scan",
+        "generated_at_utc": "2026-09-28T11:14:17.974725+00:00",
+        "news_count": 40,
+        "fno_candidate_count": 3,
+        "ai_status": "NO_AI_AVAILABLE",
+        "market_regime": "BEARISH_STRUCTURE",
+        "candidates": [
+          {
+            "rank": 1,
+            "symbol": "POLICYBZR",
+            "price": 1151.300048828125,
+            "change_pct": -1.26,
+            "setup_quality_score": 58.53,
+            "option_chain_available": false
+          },
+          {
+            "rank": 2,
+            "symbol": "AXISBANK",
+            "price": 1209.9000244140625,
+            "change_pct": -1.02,
+            "setup_quality_score": 54.19,
+            "option_chain_available": false
+          },
+          {
+            "rank": 3,
+            "symbol": "SBIN",
+            "price": 962.0,
+            "change_pct": -2.14,
+            "setup_quality_score": 51.25,
+            "option_chain_available": false
+          }
+        ]
       }
     ],
-    "last_refresh_ist": "2026-09-28T15:39:56.287943+05:30",
-    "refresh_count": 2,
+    "last_refresh_ist": "2026-09-28T16:44:32.045268+05:30",
+    "refresh_count": 3,
     "capital_inr": 25000,
     "focus": "Liquid F&O stocks + NIFTY + BANKNIFTY",
     "strategy_rule": "No forced trade; require catalyst + price action + OI/option evidence + clear invalidation",
