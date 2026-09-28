@@ -1,7 +1,7 @@
 {
   "app_version": 1,
   "phase": "live_scan",
-  "generated_at_utc": "2026-09-28T14:30:08.756597+00:00",
+  "generated_at_utc": "2026-09-28T16:00:31.970623+00:00",
   "news": [
     {
       "headline": "PB Fintech shares can rally 91% after 2-day bloodbath, says Bernstein. Here’s why it remains bullish",
@@ -167,7 +167,7 @@
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-28T14:30:17.932082+00:00",
+      "chain_fetched_at_utc": "2026-09-28T16:00:47.041662+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     },
@@ -183,7 +183,7 @@
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-28T14:30:18.314464+00:00",
+      "chain_fetched_at_utc": "2026-09-28T16:00:47.494283+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     },
@@ -199,7 +199,7 @@
       "calls": [],
       "puts": [],
       "chain_source": "unavailable",
-      "chain_fetched_at_utc": "2026-09-28T14:30:18.910565+00:00",
+      "chain_fetched_at_utc": "2026-09-28T16:00:47.900206+00:00",
       "chain_provider_timestamp": null,
       "chain_warning": null
     }
@@ -239,7 +239,7 @@
       "status": "READY",
       "reason": "price is below previous-day low; volume 1.38x 20D average; bearish EMA20 < EMA50 structure; RSI14 34.6",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T14:30:10.914284+00:00"
+      "fetched_at_utc": "2026-09-28T16:00:36.653567+00:00"
     },
     {
       "symbol": "BEL",
@@ -256,7 +256,7 @@
       "status": "READY",
       "reason": "price is below previous-day low; volume 1.25x 20D average; bearish EMA20 < EMA50 structure; RSI14 30.3",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T14:30:09.660926+00:00"
+      "fetched_at_utc": "2026-09-28T16:00:34.834990+00:00"
     },
     {
       "symbol": "SHRIRAMFIN",
@@ -273,7 +273,7 @@
       "status": "READY",
       "reason": "price is below previous-day low; volume 1.23x 20D average; bearish EMA20 < EMA50 structure; RSI14 32.9",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T14:30:11.903494+00:00"
+      "fetched_at_utc": "2026-09-28T16:00:38.058704+00:00"
     },
     {
       "symbol": "KOTAKBANK",
@@ -290,7 +290,7 @@
       "status": "WATCH",
       "reason": "price is close to previous-day low; volume 1.44x 20D average; RSI14 31.1",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T14:30:11.137516+00:00"
+      "fetched_at_utc": "2026-09-28T16:00:36.920674+00:00"
     },
     {
       "symbol": "BAJFINANCE",
@@ -307,7 +307,7 @@
       "status": "WATCH",
       "reason": "price is close to previous-day low; volume 1.33x 20D average; bearish EMA20 < EMA50 structure; RSI14 35.9",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T14:30:11.544638+00:00"
+      "fetched_at_utc": "2026-09-28T16:00:37.476686+00:00"
     },
     {
       "symbol": "ADANIPOWER",
@@ -324,7 +324,7 @@
       "status": "WATCH",
       "reason": "price is close to previous-day low; volume 1.24x 20D average; bearish EMA20 < EMA50 structure; RSI14 35.3",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T14:30:14.001742+00:00"
+      "fetched_at_utc": "2026-09-28T16:00:41.352447+00:00"
     },
     {
       "symbol": "TITAN",
@@ -341,7 +341,7 @@
       "status": "CONFIRM",
       "reason": "price is below previous-day low; volume 1.16x 20D average; confirmation needed; RSI14 38.1",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T14:30:16.398218+00:00"
+      "fetched_at_utc": "2026-09-28T16:00:45.249679+00:00"
     },
     {
       "symbol": "RELIANCE",
@@ -358,7 +358,7 @@
       "status": "CONFIRM",
       "reason": "price is below previous-day low; volume 1.15x 20D average; confirmation needed; bearish EMA20 < EMA50 structure; RSI14 23.8",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T14:30:10.569215+00:00"
+      "fetched_at_utc": "2026-09-28T16:00:35.873410+00:00"
     },
     {
       "symbol": "JINDALSTEL",
@@ -375,7 +375,7 @@
       "status": "WATCH",
       "reason": "price is close to previous-day low; volume 1.06x 20D average; confirmation needed; RSI14 50.8",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T14:30:13.662293+00:00"
+      "fetched_at_utc": "2026-09-28T16:00:40.889450+00:00"
     },
     {
       "symbol": "WIPRO",
@@ -392,7 +392,7 @@
       "status": "CONFIRM",
       "reason": "price is below previous-day low; volume 1.01x 20D average; confirmation needed; bearish EMA20 < EMA50 structure; RSI14 27.3",
       "source": "yfinance",
-      "fetched_at_utc": "2026-09-28T14:30:15.020457+00:00"
+      "fetched_at_utc": "2026-09-28T16:00:42.982624+00:00"
     }
   ],
   "ai_analyses": [],
@@ -575,10 +575,45 @@
             "option_chain_available": false
           }
         ]
+      },
+      {
+        "timestamp_ist": "2026-09-28T21:30:52.948868+05:30",
+        "phase": "live_scan",
+        "generated_at_utc": "2026-09-28T16:00:31.970623+00:00",
+        "news_count": 40,
+        "fno_candidate_count": 3,
+        "ai_status": "NO_AI_AVAILABLE",
+        "market_regime": "BEARISH_STRUCTURE",
+        "candidates": [
+          {
+            "rank": 1,
+            "symbol": "POLICYBZR",
+            "price": 1151.300048828125,
+            "change_pct": -1.26,
+            "setup_quality_score": 58.53,
+            "option_chain_available": false
+          },
+          {
+            "rank": 2,
+            "symbol": "AXISBANK",
+            "price": 1209.9000244140625,
+            "change_pct": -1.02,
+            "setup_quality_score": 54.19,
+            "option_chain_available": false
+          },
+          {
+            "rank": 3,
+            "symbol": "SBIN",
+            "price": 962.0,
+            "change_pct": -2.14,
+            "setup_quality_score": 51.25,
+            "option_chain_available": false
+          }
+        ]
       }
     ],
-    "last_refresh_ist": "2026-09-28T20:00:22.886854+05:30",
-    "refresh_count": 5,
+    "last_refresh_ist": "2026-09-28T21:30:52.948868+05:30",
+    "refresh_count": 6,
     "capital_inr": 25000,
     "focus": "Liquid F&O stocks + NIFTY + BANKNIFTY",
     "strategy_rule": "No forced trade; require catalyst + price action + OI/option evidence + clear invalidation",
