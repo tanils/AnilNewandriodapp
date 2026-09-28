@@ -140,10 +140,45 @@
           "option_chain_available": false
         }
       ]
+    },
+    {
+      "timestamp_ist": "2026-09-28T20:00:22.886854+05:30",
+      "phase": "live_scan",
+      "generated_at_utc": "2026-09-28T14:30:08.756597+00:00",
+      "news_count": 40,
+      "fno_candidate_count": 3,
+      "ai_status": "NO_AI_AVAILABLE",
+      "market_regime": "BEARISH_STRUCTURE",
+      "candidates": [
+        {
+          "rank": 1,
+          "symbol": "POLICYBZR",
+          "price": 1151.300048828125,
+          "change_pct": -1.26,
+          "setup_quality_score": 58.53,
+          "option_chain_available": false
+        },
+        {
+          "rank": 2,
+          "symbol": "AXISBANK",
+          "price": 1209.9000244140625,
+          "change_pct": -1.02,
+          "setup_quality_score": 54.19,
+          "option_chain_available": false
+        },
+        {
+          "rank": 3,
+          "symbol": "SBIN",
+          "price": 962.0,
+          "change_pct": -2.14,
+          "setup_quality_score": 51.25,
+          "option_chain_available": false
+        }
+      ]
     }
   ],
-  "last_refresh_ist": "2026-09-28T17:30:48.300757+05:30",
-  "refresh_count": 4,
+  "last_refresh_ist": "2026-09-28T20:00:22.886854+05:30",
+  "refresh_count": 5,
   "capital_inr": 25000,
   "focus": "Liquid F&O stocks + NIFTY + BANKNIFTY",
   "strategy_rule": "No forced trade; require catalyst + price action + OI/option evidence + clear invalidation",
