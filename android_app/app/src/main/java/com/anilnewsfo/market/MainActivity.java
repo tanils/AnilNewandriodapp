@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.graphics.Typeface;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -103,7 +102,8 @@ public class MainActivity extends Activity {
         master.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
         content.addView(master);
 
-        Button refresh = new Button(this);\n        refresh.setText("↻  REFRESH LIVE FEED");
+        Button refresh = new Button(this);
+        refresh.setText("↻  REFRESH LIVE FEED");
         refresh.setTextSize(13);
         refresh.setOnClickListener(v -> loadFeed());
         LinearLayout.LayoutParams refreshParams = new LinearLayout.LayoutParams(-1, 56);
