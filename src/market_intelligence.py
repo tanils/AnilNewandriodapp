@@ -1,37 +1,25 @@
 """End-to-end context-first market intelligence runner and Telegram delivery."""
 from __future__ import annotations
 import argparse, json, os
-from datetime import datetime
-from zoneinfo import ZoneInfo
 from pathlib import Path
 import requests
 from src.ai_crosscheck import cross_check
 from src.event_memory import remember
 from src.market_data import snapshot, option_chain_summary
+from src.momentum_scanner import top_fno_movers, FALLBACK_FNO_UNIVERSE
 from src.news_intelligence import build_ai_payload, collect_fresh_news
 
 STATE_FILE = Path("data/news_intelligence_state.json")
 APP_FEED_FILE = Path("data/app_feed.json")
-DAILY_MASTER_FILE = Path("data/daily_master_analysis.json")
-IST = ZoneInfo("Asia/Kolkata")
 
 # Liquid NSE F&O universe used for candidate discovery. The AI may reject every
 # candidate; this is deliberately a discovery universe, not a recommendation list.
-LIQUID_FNO_UNIVERSE = [
-    "RELIANCE", "HDFCBANK", "ICICIBANK", "SBIN", "AXISBANK",
-    "KOTAKBANK", "INDUSINDBK", "BAJFINANCE", "BAJAJFINSV", "SHRIRAMFIN",
-    "LT", "TATAMOTORS", "M&M", "MARUTI", "TATASTEEL",
-    "JINDALSTEL", "ADANIPORTS", "ADANIPOWER", "BEL", "BHARTIARTL",
-    "INFY", "TCS", "WIPRO", "PERSISTENT", "HCLTECH",
-    "SUNPHARMA", "LUPIN", "TRENT", "TITAN", "ITC",
-]
-
+0
 def send_telegram(message: str) -> None:
     token = os.getenv("TELEGRAM_BOT_TOKEN")
     chat_id = os.getenv("TELEGRAM_CHAT_ID")
     if not token or not chat_id:
-        print("Telegram credentials not configured; continuing without Telegram delivery.")
-        return
+        raise RuntimeError("TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are required")
     for i in range(0, len(message), 3900):
         r = requests.post(
             f"https://api.telegram.org/bot{token}/sendMessage",
@@ -91,41 +79,41 @@ def _candidate_score(symbol: str, market: dict, news_items: list[dict]) -> float
 
 def _market_cache(payload):
     news_items = payload.get("items", [])
+    movers, mover_errors = top_fno_movers(limit_each=15)
+    mover_map = {item["symbol"]: item for item in movers}
+    mover_symbols = [item["symbol"] for item in movers]
     news_symbols = {
         symbol for item in news_items for symbol in (item.get("symbols") or [])
         if symbol and symbol not in {"MARKET", "SECTOR"}
     }
     discovery_symbols = list(dict.fromkeys(
-        ["NIFTY", "BANKNIFTY"] + list(news_symbols) + LIQUID_FNO_UNIVERSE
+        ["NIFTY", "BANKNIFTY"] + mover_symbols + list(news_symbols) + FALLBACK_FNO_UNIVERSE
     ))
-
     cache = {}
     for symbol in discovery_symbols:
         cache[symbol] = snapshot(symbol)
+        if symbol in mover_map:
+            cache[symbol]["mover"] = mover_map[symbol]
 
-    # First pass: select liquid/active candidates using supplied news relevance
-    # and observed price movement. Then fetch option chains only for the
-    # shortlist to avoid hammering the public fallback provider.
     ranked = sorted(
-        (
-            (symbol, market)
-            for symbol, market in cache.items()
-            if symbol not in {"NIFTY", "BANKNIFTY"} and market.get("available")
+        ((symbol, market) for symbol, market in cache.items()
+         if symbol not in {"NIFTY", "BANKNIFTY"} and market.get("available")),
+        key=lambda pair: (
+            1 if pair[0] in mover_map else 0,
+            _candidate_score(pair[0], pair[1], news_items),
         ),
-        key=lambda pair: _candidate_score(pair[0], pair[1], news_items),
         reverse=True,
     )
-
-    # Always include the indices; add the most relevant liquid stock candidates.
     chain_symbols = ["NIFTY", "BANKNIFTY"]
-    for symbol, _ in ranked[:3]:
+    for symbol, _ in ranked[:5]:
         if symbol not in chain_symbols:
             chain_symbols.append(symbol)
-
     for symbol in chain_symbols:
         if symbol in cache:
             cache[symbol]["option_chain"] = option_chain_summary(symbol)
 
+    payload["fno_movers"] = movers
+    payload["fno_mover_errors"] = mover_errors
     payload["fno_candidate_universe"] = discovery_symbols
     payload["fno_option_candidates"] = [
         {
@@ -133,22 +121,23 @@ def _market_cache(payload):
             "symbol": symbol,
             "price": cache[symbol].get("price"),
             "change_pct": cache[symbol].get("change_pct"),
+            "mover": cache[symbol].get("mover"),
             "technical": cache[symbol].get("technical"),
             "option_chain_available": bool(cache[symbol].get("option_chain", {}).get("available")),
             "setup_quality_score": _candidate_score(symbol, cache[symbol], news_items),
             "deep_chain_checked": symbol in chain_symbols,
         }
-        for rank, (symbol, _) in enumerate(ranked[:3], 1)
+        for rank, (symbol, _) in enumerate(ranked[:5], 1)
     ]
     return cache
-
 def _ai_evidence_payload(payload):
     """Keep the reasoning prompt compact enough for free AI provider limits."""
     evidence = dict(payload)
     evidence["items"] = payload.get("items", [])[:15]
+    evidence["fno_movers"] = payload.get("fno_movers", [])[:30]
     market = payload.get("market_data") or {}
     allowed = {"NIFTY", "BANKNIFTY"} | {
-        x.get("symbol") for x in payload.get("fno_option_candidates", [])[:3] if x.get("symbol")
+        x.get("symbol") for x in payload.get("fno_option_candidates", [])[:5] if x.get("symbol")
     }
     compact = {}
     for symbol in allowed:
@@ -183,142 +172,6 @@ def _ai_evidence_payload(payload):
     evidence["fno_option_candidates"] = payload.get("fno_option_candidates", [])[:12]
     return evidence
 
-
-def _breakout_scan(cache: dict) -> list[dict]:
-    """Create evidence-based technical watch candidates; never predicts returns."""
-    results = []
-    for symbol, market in cache.items():
-        if symbol in {"NIFTY", "BANKNIFTY"} or not market.get("available"):
-            continue
-        t = market.get("technical") or {}
-        price = market.get("price")
-        prev_high = t.get("previous_day_high")
-        prev_low = t.get("previous_day_low")
-        if price is None:
-            continue
-        volume_ratio = t.get("volume_vs_20d_avg")
-        ema20, ema50 = t.get("ema20"), t.get("ema50")
-        rsi = t.get("rsi14")
-        if prev_high is None or prev_low is None:
-            continue
-        distance_high = ((float(price) - float(prev_high)) / float(prev_high)) * 100
-        distance_low = ((float(price) - float(prev_low)) / float(prev_low)) * 100
-        vol_ok = volume_ratio is not None and float(volume_ratio) >= 1.2
-        bullish_structure = ema20 is not None and ema50 is not None and float(price) > float(ema20) > float(ema50)
-        bearish_structure = ema20 is not None and ema50 is not None and float(price) < float(ema20) < float(ema50)
-
-        pattern = None
-        trigger = None
-        invalidation = None
-        status = "WATCH"
-        reason = []
-        distance = None
-
-        if distance_high >= 0:
-            pattern = "PREVIOUS-DAY-HIGH BREAKOUT"
-            trigger = round(float(prev_high), 2)
-            invalidation = round(float(prev_high), 2)
-            distance = round(distance_high, 2)
-            status = "READY" if vol_ok and bullish_structure else "CONFIRM"
-            reason.append("price is above previous-day high")
-        elif abs(distance_high) <= 0.75:
-            pattern = "NEAR PREVIOUS-DAY-HIGH"
-            trigger = round(float(prev_high), 2)
-            invalidation = round(float(prev_low), 2)
-            distance = round(abs(distance_high), 2)
-            reason.append("price is close to previous-day high")
-        elif distance_low <= 0:
-            pattern = "PREVIOUS-DAY-LOW BREAKDOWN"
-            trigger = round(float(prev_low), 2)
-            invalidation = round(float(prev_low), 2)
-            distance = round(abs(distance_low), 2)
-            status = "READY" if vol_ok and bearish_structure else "CONFIRM"
-            reason.append("price is below previous-day low")
-        elif abs(distance_low) <= 0.75:
-            pattern = "NEAR PREVIOUS-DAY-LOW"
-            trigger = round(float(prev_low), 2)
-            invalidation = round(float(prev_high), 2)
-            distance = round(abs(distance_low), 2)
-            reason.append("price is close to previous-day low")
-
-        if not pattern:
-            continue
-        if vol_ok:
-            reason.append(f"volume {float(volume_ratio):.2f}x 20D average")
-        elif volume_ratio is not None:
-            reason.append(f"volume {float(volume_ratio):.2f}x 20D average; confirmation needed")
-        if bullish_structure:
-            reason.append("bullish EMA20 > EMA50 structure")
-        elif bearish_structure:
-            reason.append("bearish EMA20 < EMA50 structure")
-        if rsi is not None:
-            reason.append(f"RSI14 {float(rsi):.1f}")
-
-        results.append({
-            "symbol": symbol,
-            "price": price,
-            "change_pct": market.get("change_pct"),
-            "pattern": pattern,
-            "trigger": trigger,
-            "invalidation": invalidation,
-            "distance_pct": distance,
-            "volume_ratio": volume_ratio,
-            "rsi14": rsi,
-            "ema20": ema20,
-            "ema50": ema50,
-            "status": status,
-            "reason": "; ".join(reason),
-            "source": market.get("source"),
-            "fetched_at_utc": market.get("fetched_at_utc"),
-        })
-
-    return sorted(
-        results,
-        key=lambda x: (
-            x.get("status") == "READY",
-            x.get("volume_ratio") is not None and float(x.get("volume_ratio") or 0),
-            -float(x.get("distance_pct") or 999),
-        ),
-        reverse=True,
-    )[:10]
-
-
-def _market_regime(cache: dict) -> dict:
-    """Describe the supplied index structure without making a directional forecast."""
-    indices = {}
-    for symbol in ("NIFTY", "BANKNIFTY"):
-        m = cache.get(symbol) or {}
-        t = m.get("technical") or {}
-        change = m.get("change_pct")
-        price = m.get("price")
-        ema20, ema50 = t.get("ema20"), t.get("ema50")
-        if price is None or change is None:
-            indices[symbol] = {"status": "DATA_UNAVAILABLE"}
-            continue
-        if ema20 is not None and ema50 is not None:
-            structure = "BULLISH_STRUCTURE" if float(price) > float(ema20) > float(ema50) else (
-                "BEARISH_STRUCTURE" if float(price) < float(ema20) < float(ema50) else "MIXED_STRUCTURE"
-            )
-        else:
-            structure = "STRUCTURE_UNAVAILABLE"
-        indices[symbol] = {
-            "price": price,
-            "change_pct": change,
-            "structure": structure,
-            "ema20": ema20,
-            "ema50": ema50,
-        }
-    available = [x for x in indices.values() if x.get("status") != "DATA_UNAVAILABLE"]
-    if not available:
-        label = "DATA_UNAVAILABLE"
-    elif all(x.get("structure") == "BULLISH_STRUCTURE" for x in available):
-        label = "BULLISH_STRUCTURE"
-    elif all(x.get("structure") == "BEARISH_STRUCTURE" for x in available):
-        label = "BEARISH_STRUCTURE"
-    else:
-        label = "MIXED_STRUCTURE"
-    return {"label": label, "indices": indices}
-
 def final_report(phase, payload, result):
     header = {
         "night": "🌙 NIGHT MARKET INTELLIGENCE",
@@ -332,7 +185,7 @@ def final_report(phase, payload, result):
         header,
         "━━━━━━━━━━━━━━━━━━",
         "📖 CONTEXT-FIRST NEWS + F&O ANALYSIS",
-        "Market is screened broadly, but deep F&O analysis is limited to the top 3 setup-quality candidates plus NIFTY/BANK NIFTY.",
+        "Discovery pool: LIVE NSE F&O TOP 15 GAINERS + TOP 15 LOSERS. Deep F&O analysis covers the top 5 setup candidates plus NIFTY/BANK NIFTY.",
         "Setup-quality score is an evidence score, NOT a probability of profit.",
         "News freshness gate: only current/recent items up to 72 hours are used; older items are excluded.",
         "Each important item includes the report summary so the user can see key numbers/context.",
@@ -366,8 +219,8 @@ def final_report(phase, payload, result):
 
     # Make the actual option-selection section visible even when an AI provider
     # is unavailable. It shows data availability, not a guessed recommendation.
-    lines += ["━━━━━━━━━━━━━━━━━━", "🔥 TOP 3 SUPER-SETUP SCREEN"]
-    for item in payload.get("fno_option_candidates", [])[:3]:
+    lines += ["━━━━━━━━━━━━━━━━━━", "🔥 TOP 5 SUPER-SETUP SCREEN"]
+    for item in payload.get("fno_option_candidates", [])[:5]:
         status = "CHAIN READY" if item.get("option_chain_available") else "CHAIN UNAVAILABLE"
         score = item.get("setup_quality_score", 0)
         tier = "🔥 SUPER SETUP CANDIDATE" if float(score) >= 90 else "🟡 DEVELOPING CANDIDATE"
@@ -425,39 +278,15 @@ def save_state(phase, payload, result, report):
             "available_models": result["available_models"],
             "generated_at_utc": payload["generated_at_utc"],
             "news_count": len(payload["items"]),
+            "fno_mover_count": len(payload.get("fno_movers", [])),
             "fno_candidate_count": len(payload.get("fno_option_candidates", [])),
             "report": report,
         }, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
 
-def save_daily_master_analysis(phase, payload, result):
-    """Persist same-day hourly master-analysis state for the Android app."""
-    DAILY_MASTER_FILE.parent.mkdir(parents=True, exist_ok=True)
-    now = datetime.now(IST)
-    trading_date = now.date().isoformat()
-    try:
-        existing = json.loads(DAILY_MASTER_FILE.read_text(encoding="utf-8"))
-    except Exception:
-        existing = {}
-    if existing.get("trading_date") != trading_date:
-        existing = {"trading_date": trading_date, "refreshes": []}
-    candidates = []
-    for item in payload.get("fno_option_candidates", [])[:5]:
-        candidates.append({"rank": item.get("rank"), "symbol": item.get("symbol"), "price": item.get("price"), "change_pct": item.get("change_pct"), "setup_quality_score": item.get("setup_quality_score"), "option_chain_available": item.get("option_chain_available", False)})
-    refresh = {"timestamp_ist": now.isoformat(), "phase": phase, "generated_at_utc": payload.get("generated_at_utc"), "news_count": len(payload.get("items", [])), "fno_candidate_count": len(payload.get("fno_option_candidates", [])), "ai_status": result.get("status", "unknown"), "market_regime": payload.get("market_regime", {}).get("label", "DATA_UNAVAILABLE"), "candidates": candidates}
-    existing["refreshes"] = ((existing.get("refreshes") or []) + [refresh])[-24:]
-    existing["last_refresh_ist"] = refresh["timestamp_ist"]
-    existing["refresh_count"] = len(existing["refreshes"])
-    existing["capital_inr"] = 25000
-    existing["focus"] = "Liquid F&O stocks + NIFTY + BANKNIFTY"
-    existing["strategy_rule"] = "No forced trade; require catalyst + price action + OI/option evidence + clear invalidation"
-    existing["next_refresh"] = "Next scheduled hourly market-intelligence run"
-    DAILY_MASTER_FILE.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
-    return existing
-
 def save_app_feed(phase, payload, result):
-    """Write a secret-free feed consumed by the Android app."""
+    """Write a public, secret-free feed consumed by the Android app."""
     APP_FEED_FILE.parent.mkdir(parents=True, exist_ok=True)
     news = []
     for item in payload.get("items", [])[:15]:
@@ -471,12 +300,15 @@ def save_app_feed(phase, payload, result):
             "news_type": item.get("news_type", "context"),
             "symbols": ", ".join(item.get("symbols") or ["MARKET/SECTOR"]),
         })
+
     fno = []
     market = payload.get("market_data") or {}
-    for item in payload.get("fno_option_candidates", [])[:3]:
+    for item in payload.get("fno_option_candidates", [])[:5]:
         symbol = item.get("symbol")
         chain = market.get(symbol, {}).get("option_chain") or {}
         stats = chain.get("stats") or {}
+        calls = (chain.get("calls") or [])[:5]
+        puts = (chain.get("puts") or [])[:5]
         option_summary = (
             f"Expiry: {chain.get('expiry', 'n/a')} | "
             f"PCR OI: {stats.get('pcr_oi', 'n/a')} | "
@@ -494,40 +326,41 @@ def save_app_feed(phase, payload, result):
             "option_chain_available": item.get("option_chain_available", False),
             "expiry": chain.get("expiry"),
             "option_summary": option_summary,
-            "calls": (chain.get("calls") or [])[:5],
-            "puts": (chain.get("puts") or [])[:5],
+            "calls": calls,
+            "puts": puts,
             "chain_source": chain.get("source"),
             "chain_fetched_at_utc": chain.get("fetched_at_utc"),
             "chain_provider_timestamp": chain.get("provider_timestamp"),
             "chain_warning": chain.get("warning"),
-            "calls": (chain.get("calls") or [])[:5],
-            "puts": (chain.get("puts") or [])[:5],
         })
-    analyses = [{"provider": x.get("provider", "AI"), "analysis": x.get("analysis", "")}
-                for x in result.get("analyses", [])]
-    daily_master = save_daily_master_analysis(phase, payload, result)
-    APP_FEED_FILE.write_text(json.dumps({
-        "app_version": 1,
-        "phase": phase,
-        "generated_at_utc": payload.get("generated_at_utc"),
-        "news": news,
-        "fno_candidates": fno,
-        "market_regime": payload.get("market_regime", {}),
-        "breakouts": payload.get("breakouts", [])[:10],
-        "ai_analyses": analyses,
-        "ai_status": result.get("status", "unknown"),
-        "available_models": result.get("available_models", []),
-        "daily_master_analysis": daily_master,
-        "master_status": "AI_UNAVAILABLE" if result.get("status") in {"NO_AI_AVAILABLE", "ERROR"} else "ANALYSIS_READY",
-    }, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    analyses = [
+        {"provider": x.get("provider", "AI"), "analysis": x.get("analysis", "")}
+        for x in result.get("analyses", [])
+    ]
+
+    APP_FEED_FILE.write_text(
+        json.dumps({
+            "app_version": 1,
+            "phase": phase,
+            "generated_at_utc": payload.get("generated_at_utc"),
+            "news": news,
+            "fno_movers": payload.get("fno_movers", [])[:30],
+            "fno_candidates": fno,
+            "breakouts": [],
+            "strategy": "top 15 F&O gainers + top 15 F&O losers -> catalyst + momentum + breakout + OI/options -> CE/PE or NO TRADE",
+            "ai_analyses": analyses,
+            "ai_status": result.get("status", "unknown"),
+            "available_models": result.get("available_models", []),
+        }, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
 
 
 def run(phase):
     news = remember(collect_fresh_news())
     payload = dict(build_ai_payload(news, phase))
     payload["market_data"] = _market_cache(payload)
-    payload["market_regime"] = _market_regime(payload["market_data"])
-    payload["breakouts"] = _breakout_scan(payload["market_data"])
     result = cross_check(_ai_evidence_payload(payload), phase)
     report = final_report(phase, payload, result)
     save_state(phase, payload, result, report)
